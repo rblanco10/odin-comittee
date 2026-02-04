@@ -1,0 +1,225 @@
+# Dissolve Committee Workflow
+# Safely decommissions a committee
+
+name: Dissolve Committee
+description: Orderly dissolution of a committee
+version: 1.0.0
+
+triggers:
+  - Human Director requests dissolution
+  - Committee mission completed
+  - Committee superseded by another
+  - Extended inactivity
+
+actors:
+  - Khaos (Dissolution authority)
+  - Committee Chair (Knowledge transfer)
+  - Human Director (Final approval)
+
+prerequisites:
+  - Human Director has authorized dissolution
+  - Committee has no active sessions
+  - No blocking dependencies from other committees
+
+phases:
+
+  # Phase 1: Initiation
+  initiation:
+    description: Dissolution is initiated
+    actor: Human Director
+    
+    steps:
+      - step: Request Dissolution
+        description: Human Director requests committee dissolution
+        input:
+          - target_committee
+          - dissolution_reason
+        output: dissolution_request
+        
+      - step: Khaos Acknowledges
+        description: Khaos acknowledges and begins assessment
+        actor: Khaos
+        output: acknowledgment
+
+  # Phase 2: Dependency Check
+  dependency_check:
+    description: Verify no dependencies will break
+    actor: Khaos
+    
+    steps:
+      - step: Check Cross-References
+        description: Search for references to this committee
+        search_locations:
+          - other committees' knowledge bases
+          - workflow references
+          - documentation links
+        output: cross_references
+        
+      - step: Identify Dependents
+        description: List any committees depending on this one
+        output: dependent_committees
+        
+      - step: Assess Impact
+        description: Determine dissolution impact
+        output: impact_assessment
+        
+      - step: Report Dependencies
+        description: Present dependencies to Human Director
+        condition: dependent_committees.length > 0
+        output: dependency_report
+        
+      - step: Obtain Approval
+        description: Human Director approves despite dependencies
+        actor: Human Director
+        condition: dependent_committees.length > 0
+        gate: true
+        output: dependency_override
+
+  # Phase 3: Knowledge Preservation
+  knowledge_preservation:
+    description: Archive valuable knowledge
+    actor: Committee Chair
+    
+    steps:
+      - step: Identify Valuable Knowledge
+        description: List knowledge that should be preserved
+        categories:
+          - Unique domain knowledge
+          - Lessons learned
+          - Common issues documented
+          - Tools and queries
+        output: knowledge_inventory
+        
+      - step: Determine Destination
+        description: Where should knowledge go?
+        options:
+          - Transfer to successor committee
+          - Archive in Khaos knowledge base
+          - Merge into related committee
+        output: knowledge_destination
+        
+      - step: Execute Transfer
+        description: Move/copy knowledge to destination
+        input: knowledge_destination
+        output: transfer_complete
+        
+      - step: Update References
+        description: Update any links pointing to transferred content
+        output: references_updated
+
+  # Phase 4: Session Closure
+  session_closure:
+    description: Close any open sessions
+    actor: Committee Chair
+    
+    steps:
+      - step: Check Open Sessions
+        description: Identify any sessions not marked CLOSED
+        output: open_sessions
+        
+      - step: Close Sessions
+        description: Mark all sessions as CLOSED with dissolution note
+        condition: open_sessions.length > 0
+        output: sessions_closed
+        
+      - step: Final Session
+        description: Create dissolution session record
+        session_type: dissolution
+        contents:
+          - Dissolution reason
+          - Knowledge transfer summary
+          - Final acknowledgments
+        output: dissolution_session
+
+  # Phase 5: Member Acknowledgment
+  member_acknowledgment:
+    description: Record member acknowledgments
+    actor: Committee Chair
+    
+    steps:
+      - step: Notify Members
+        description: Inform all members of dissolution
+        output: members_notified
+        
+      - step: Record Contributions
+        description: Document key contributions of each member
+        output: contribution_record
+        
+      - step: Update Roster
+        description: Mark roster as DISSOLVED
+        output: roster_updated
+
+  # Phase 6: Archive
+  archive:
+    description: Archive committee files
+    actor: Khaos
+    
+    steps:
+      - step: Update Committee Status
+        description: Mark committee STATUS.md as DISSOLVED
+        update:
+          status: DISSOLVED
+          dissolved_date: current_date
+          dissolution_reason: from_request
+        output: status_updated
+        
+      - step: Update README
+        description: Add dissolution notice to README
+        notice: |
+          > **DISSOLVED**: This committee was dissolved on [DATE].
+          > Reason: [REASON]
+          > Knowledge transferred to: [DESTINATION]
+        output: readme_updated
+        
+      - step: Archive Decision
+        description: Decide archive location
+        options:
+          - Keep in _committees/ (with DISSOLVED status)
+          - Move to _committees/_archived/
+        output: archive_location
+
+  # Phase 7: MAS Update
+  mas_update:
+    description: Update MAS registry
+    actor: Khaos
+    
+    steps:
+      - step: Update Khaos Status
+        description: Update Khaos STATUS.md
+        changes:
+          - Decrement active committee count
+          - Add to dissolved committees list
+          - Record dissolution in audit log
+        output: khaos_status_updated
+        
+      - step: Update Lineage Records
+        description: Note dissolution in Protogenos records
+        input: committee_lineage
+        output: lineage_updated
+        
+      - step: Final Announcement
+        description: Khaos announces dissolution complete
+        output: dissolution_announcement
+
+outputs:
+  - knowledge_destination: Where knowledge was transferred
+  - dissolution_date: When committee was dissolved
+  - archive_location: Where committee files reside
+  - audit_record: Record in Khaos audit log
+
+reversal:
+  description: Dissolution cannot be reversed
+  alternative: Create new committee with same purpose if needed
+  
+error_handling:
+  active_sessions:
+    description: Cannot dissolve with active sessions
+    action: Close all sessions first
+    
+  unresolved_dependencies:
+    description: Other committees depend on this one
+    action: Human Director must approve override or resolve dependencies
+    
+  knowledge_loss_risk:
+    description: Valuable knowledge may be lost
+    action: Require knowledge transfer before proceeding

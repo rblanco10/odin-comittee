@@ -1,0 +1,144 @@
+name: Architecture Review
+version: "1.0"
+description: >
+  Review and deliberate on architectural proposals for the AR domain.
+  Used when evaluating new patterns, approaches, or significant changes.
+
+triggers:
+  - New architectural proposal submitted
+  - Significant change to existing architecture
+  - Cross-domain integration design
+  - Pattern introduction request
+
+participants:
+  required:
+    - Chair (L001)
+    - Relevant SC Lead
+    - Complexity Critic (C004)
+    - Legacy Alignment Adversary (C001)
+    - Pattern Historian (H002)
+  optional:
+    - Performance Skeptic (C002)
+    - Technical specialists as needed
+    - Domain experts as needed
+
+phases:
+  - name: Proposal Presentation
+    owner: Proposer
+    activities:
+      - Present the architectural proposal
+      - Explain rationale and alternatives considered
+      - Identify affected lifecycles and resources
+      - State expected benefits
+    outputs:
+      - Documented proposal
+      - Scope definition
+    next: Historical Context
+
+  - name: Historical Context
+    owner: Pattern Historian (H002)
+    activities:
+      - Review precedent for similar proposals
+      - Identify existing patterns in codebase
+      - Note any prior decisions on this topic
+    outputs:
+      - Precedent report
+      - Pattern alignment assessment
+    next: Critic Challenge Round
+
+  - name: Critic Challenge Round
+    owner: Chair
+    activities:
+      - Complexity Critic challenges necessity
+      - Legacy Adversary challenges compatibility
+      - Performance Skeptic challenges efficiency (if present)
+      - Each challenge must be addressed
+    outputs:
+      - Challenge responses documented
+      - Modifications if needed
+    next: Constitutional Verification
+
+  - name: Constitutional Verification
+    owner: Parliamentarian (L003)
+    activities:
+      - Verify legacy compatibility rule
+      - Verify decimal for money rule
+      - Verify tenant isolation rule
+      - Verify state machine rule
+      - Verify performance budget rule
+    outputs:
+      - Constitutional compliance report
+    next: Deliberation
+
+  - name: Deliberation
+    owner: Chair
+    activities:
+      - Open floor for discussion
+      - Synthesize feedback
+      - Identify consensus points
+      - Note remaining concerns
+    outputs:
+      - Discussion summary
+    next: Decision
+
+  - name: Decision
+    owner: Chair
+    activities:
+      - Call for final concerns
+      - Call vote if needed
+      - Record decision with rationale
+      - Record dissenting opinions
+    outputs:
+      - Decision record
+      - Dissent documentation
+    checkpoint: true
+    next: Agentic Implementation
+
+  - name: Agentic Implementation
+    system: agentic
+    description: >
+      Handoff to Agentic system for implementation.
+      Committee generates handoff document, Agentic executes.
+    entry_point: /arch-manager
+    activities:
+      - Generate Implementation Handoff Document
+      - Route to appropriate lifecycle
+      - Manager creates prompt from handoff
+      - Coder implements
+      - Gapper/Architect review
+    outputs:
+      - Implementation log
+      - Code changes
+    next: Ratification Return
+
+  - name: Ratification Return
+    owner: Chair
+    activities:
+      - Receive implementation report from Agentic
+      - Schedule ratification session
+      - Assign critics for review
+    outputs:
+      - Ratification session scheduled
+    next: complete
+
+human_checkpoints:
+  - after: Critic Challenge Round
+    type: optional_redirect
+    reason: "Human can redirect discussion, add scope, or override critic concerns"
+  - after: Deliberation
+    type: optional_redirect
+    reason: "Human can steer deliberation or request additional analysis"
+  - after: Decision
+    type: approval_required
+    reason: "Major architectural decisions require Human Director approval before implementation"
+  - after: Ratification Return
+    type: approval_required
+    reason: "Human sign-off on completed implementation"
+
+outputs:
+  - Architectural decision record
+  - Decision logged in decisions.md
+  - Knowledge base updates if needed
+  - Handoff document if implementation required
+  - Implementation log from Agentic system
+

@@ -1,0 +1,100 @@
+name: Implementation Handoff
+version: "1.0"
+description: >
+  Generate a formal handoff document for the Agentic system.
+  Bridges committee deliberation to implementation.
+
+triggers:
+  - Architectural decision requires implementation
+  - Committee consensus on approach reached
+  - Human Director approves implementation (for major changes)
+
+participants:
+  required:
+    - Chair (L001)
+    - Parliamentarian (L003)
+    - Relevant SC Lead
+    - Domain Expert for the feature
+  optional:
+    - Critics who raised concerns
+    - Integration specialists (for ERP features)
+
+phases:
+  - name: Decision Review
+    owner: Chair
+    activities:
+      - Review the original decision
+      - Confirm scope and requirements
+      - Verify all concerns were addressed
+    outputs:
+      - Confirmed decision scope
+    next: Specification Writing
+
+  - name: Specification Writing
+    owner: SC Lead
+    activities:
+      - Document implementation objective
+      - Define success criteria (testable)
+      - List binding architectural decisions
+      - Specify out-of-scope items
+    outputs:
+      - Implementation specification
+    next: Constitutional Embedding
+
+  - name: Constitutional Embedding
+    owner: Parliamentarian (L003)
+    activities:
+      - Add legacy alignment requirements
+      - Add decimal for money requirements
+      - Add tenant isolation requirements
+      - Add state machine requirements
+      - Add performance budget requirements
+    outputs:
+      - Constitutional requirements section
+    next: Lifecycle Alignment
+
+  - name: Lifecycle Alignment
+    owner: SC Lead
+    activities:
+      - Identify target lifecycle
+      - Map to Agentic documentation
+      - List affected files
+      - Identify existing gaps
+    outputs:
+      - Lifecycle alignment section
+    next: Ratification Requirements
+
+  - name: Ratification Requirements
+    owner: Chair
+    activities:
+      - Define what committee needs to see
+      - Specify required evidence
+      - Identify reviewers for ratification
+    outputs:
+      - Ratification criteria
+    next: Sign-off
+
+  - name: Sign-off
+    owner: Chair
+    activities:
+      - Parliamentarian certifies constitutional compliance
+      - Chair signs handoff
+      - Domain expert confirms accuracy
+    outputs:
+      - Signed handoff document
+    checkpoint: true
+    next: complete
+
+human_checkpoints:
+  - after: Specification Writing
+    type: optional_redirect
+    reason: "Human can adjust scope or add requirements before constitutional embedding"
+  - after: Sign-off
+    type: approval_required
+    reason: "Human Director must approve handoff before routing to Agentic system"
+
+outputs:
+  - handoffs/[session-id]_handoff.md
+  - Bridge command ready for Agentic system
+  - STATUS.md updated with handoff reference
+

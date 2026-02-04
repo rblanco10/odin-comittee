@@ -1,0 +1,210 @@
+# Workflow: Summon the PayStand Universe Locally
+# Source: Official Setup Guide v2
+# URL: https://paystand.atlassian.net/wiki/external/NDU5ZjA0ZTcyY2VmNDQ1MDlhNTA1YzM2MjY0ZGQ3ZTM
+
+name: summon_universe
+description: Complete local development environment setup for PayStand
+version: "2.0"
+source: "Setup Guide v2 - Elliot Weaver, Aug 08, 2022"
+official_doc: "https://paystand.atlassian.net/wiki/external/NDU5ZjA0ZTcyY2VmNDQ1MDlhNTA1YzM2MjY0ZGQ3ZTM"
+
+actors:
+  - hephaestus: "Divine Smith - guides the forging"
+  - engineer: "Human performing the setup"
+
+prerequisites:
+  - macOS system
+  - Administrator (sudo) access
+  - PayStand email address
+  - GitLab account
+  - Internet connection
+
+estimated_time: "2 hours"
+
+phases:
+  # Phase 1: Foundation
+  foundation:
+    description: "Establish the cosmic foundation"
+    order: 1
+    tools:
+      - tools/local_setup/setup_ssh.md
+      - tools/local_setup/setup_system.md
+      - tools/local_setup/setup_homebrew.md
+      - tools/local_setup/setup_nvm.md
+    critical_values:
+      node_version: "12.16"
+    verification:
+      - "ssh -T git@gitlab.com returns welcome message"
+      - "node -v returns v12.16.x"
+      - "brew --version returns version"
+
+  # Phase 2: Data Layer
+  data_layer:
+    description: "Forge the data storage systems"
+    order: 2
+    tools:
+      - tools/local_setup/setup_mysql.md
+      - tools/local_setup/setup_redis.md
+      - tools/local_setup/setup_postgresql.md
+    critical_values:
+      mysql_user: "root"
+      mysql_password: "123"
+      postgres_user: "postgres"
+      postgres_database: "graphile"
+    verification:
+      - "mysql -uroot -p123 connects successfully"
+      - "redis-cli PING returns PONG"
+      - "psql -U postgres -d graphile connects successfully"
+
+  # Phase 3: Message Layer
+  message_layer:
+    description: "Establish the message conduits"
+    order: 3
+    tools:
+      - tools/local_setup/setup_rabbitmq.md
+      - tools/local_setup/setup_beanstalkd.md
+      - tools/local_setup/setup_kafka.md
+    critical_values:
+      rabbitmq_user: "test"
+      rabbitmq_password: "test"
+      kafka_port: 29092
+      kafka_topics:
+        - payment-events
+        - transfer-report-events
+        - lfs-events
+        - reconciliation-events
+        - transfer-events
+    verification:
+      - "http://localhost:15672 accessible with test/test"
+      - "nc -zv localhost 11300 succeeds"
+      - "kafka-topics --list --bootstrap-server localhost:29092 shows topics"
+
+  # Phase 4: Search & Analytics
+  search_layer:
+    description: "Summon the knowledge seekers"
+    order: 4
+    tools:
+      - tools/local_setup/setup_elasticsearch.md
+    critical_values:
+      elasticsearch_port: 9200
+      kibana_port: 5601
+    verification:
+      - "curl http://localhost:9200 returns cluster info"
+
+  # Phase 5: File Transfer
+  file_transfer:
+    description: "Open the payment gateways"
+    order: 5
+    tools:
+      - tools/local_setup/setup_sftp.md
+    critical_values:
+      sftp_directories:
+        - ~/sftp/payments/inbound
+        - ~/sftp/payments/outbound
+        - ~/sftp/reports/inbound
+        - ~/sftp/reports/outbound
+        - ~/sftp/cpi
+    config_changes:
+      file: "src/config.development.json"
+      changes:
+        - "cpi.sftpReporting.username -> <YOUR_MAC_USERNAME>"
+        - "cpi.sftpReporting.password -> <YOUR_MAC_PASSWORD>"
+        - "vantiv.sftpLitle.username -> <YOUR_MAC_USERNAME>"
+        - "vantiv.sftpLitle.password -> <YOUR_MAC_PASSWORD>"
+        - "vantiv.sftpReporting.username -> <YOUR_MAC_USERNAME>"
+        - "vantiv.sftpReporting.password -> <YOUR_MAC_PASSWORD>"
+        - "vantiv.sftpLitle.inbound -> sftp/payments/inbound/"
+        - "vantiv.sftpLitle.outbound -> sftp/payments/outbound/"
+        - "vantiv.sftpReporting.inbound -> sftp/reports/inbound"
+        - "vantiv.sftpReporting.outbound -> sftp/reports/outbound"
+    verification:
+      - "ls ~/sftp shows directory structure"
+      - "sftp $(whoami)@localhost connects"
+
+  # Phase 6: Core Application
+  core_application:
+    description: "Awaken the Primordial Core"
+    order: 6
+    tools:
+      - tools/local_setup/setup_roadrunner.md
+    critical_values:
+      repository: "git@gitlab.com:paystand/roadrunner.git"
+      databases:
+        - roadrunner_vagrant2
+        - paystandv3
+        - paystandv3_media
+        - paystandv3_test
+        - paystandv3_test_media
+    commands:
+      - "npm install"
+      - "npm run updateAll"
+      - "npm run firstTimeSetup"
+    verification:
+      - "pm2 status shows roadrunner online"
+      - "curl http://localhost:3000/api/v3/ping returns response"
+
+  # Phase 7: Microservices
+  microservices:
+    description: "Summon the auxiliary services"
+    order: 7
+    optional: true
+    tools:
+      - tools/local_setup/setup_microservices.md
+    services:
+      - name: transfer-reports
+        repository: "git@gitlab.com:paystand/transfer-reports.git"
+      - name: synapsefi
+        repository: "git@gitlab.com:paystand/synapsefi.git"
+        database: "synapsefi"
+    verification:
+      - "pm2 status shows transfer-report online"
+      - "pm2 status shows synapsefi online"
+
+important_notes:
+  - title: "After Restart"
+    description: |
+      Every time you restart your computer, you MUST:
+      1. Recreate /var/run/paystand directory
+      2. Restart all brew services
+      3. Start Roadrunner and PM2 processes
+    commands:
+      - "sudo mkdir /var/run/paystand"
+      - "sudo chmod 777 /var/run/paystand"
+      - "brew services start mysql"
+      - "brew services start redis"
+      - "brew services start rabbitmq"
+      - "brew services restart beanstalkd"
+      - "brew services start postgresql"
+      - "brew services start elastic/tap/elasticsearch-full"
+      - "brew services start zookeeper"
+      - "brew services start kafka"
+      - "cd ~/code/roadrunner && npm run serve_all"
+      - "NODE_ENV=development pm2 restart all --update-env"
+
+  - title: "SFTP Configuration"
+    description: |
+      You MUST update src/config.development.json with your Mac credentials
+      BEFORE running npm run updateAll, or the command will fail.
+
+  - title: "Node Version"
+    description: |
+      Roadrunner REQUIRES Node.js 12.16. Other versions may cause issues.
+      Always verify with: node -v
+
+success_criteria:
+  - "All brew services running"
+  - "Roadrunner responding on port 3000"
+  - "All Kafka topics created"
+  - "RabbitMQ test user can connect"
+  - "MySQL databases created"
+  - "PM2 showing all processes online"
+
+hephaestus_guidance: |
+  When summoned to help with local setup:
+  
+  1. ALWAYS reference the official documentation first
+  2. Guide through ONE phase at a time
+  3. Wait for verification before proceeding
+  4. If errors occur, check the troubleshooting section of each tool
+  5. Emphasize the SFTP configuration step - it's a common failure point
+  6. Remind about the restart requirements

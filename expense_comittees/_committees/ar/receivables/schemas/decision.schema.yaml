@@ -1,0 +1,258 @@
+# Decision Record Schema
+# Version: 1.0
+# Used in: Architecture Review, any voting workflow
+# Validated by: Recording Clerk, Parliamentarian
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: Decision Record
+description: Schema for committee decision documents
+version: "1.0"
+
+type: object
+required:
+  - id
+  - session_id
+  - date
+  - title
+  - category
+  - decision_text
+  - vote
+  - constitutional_compliance
+  - status
+
+properties:
+  id:
+    type: string
+    description: "Unique decision identifier"
+    pattern: "^DEC-\\d{4}-\\d{2}-\\d{2}-\\d{3}$"
+    example: "DEC-2026-01-14-001"
+
+  session_id:
+    type: string
+    description: "Reference to the session where decision was made"
+    pattern: "^\\d{4}-\\d{2}-\\d{2}_\\d{3}_[a-z-]+$"
+    example: "2026-01-14_001_architecture-review"
+
+  date:
+    type: string
+    format: date
+    description: "Date decision was made"
+
+  title:
+    type: string
+    description: "Brief title of the decision"
+    minLength: 10
+    maxLength: 200
+
+  category:
+    type: string
+    description: "Decision category for precedent tracking"
+    enum:
+      - architecture
+      - legacy_alignment
+      - state_machine
+      - performance
+      - erp_integration
+      - ui_surfaces
+      - testing
+      - migration
+      - other
+
+  proposer:
+    type: object
+    description: "Who proposed the item being decided"
+    properties:
+      member_id:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+
+  decision_text:
+    type: string
+    description: "The actual decision in clear, unambiguous language"
+    minLength: 50
+
+  rationale:
+    type: string
+    description: "Why this decision was made"
+
+  vote:
+    type: object
+    description: "Vote results"
+    required:
+      - in_favor
+      - opposed
+      - abstained
+      - method
+    properties:
+      in_favor:
+        type: integer
+        minimum: 0
+      opposed:
+        type: integer
+        minimum: 0
+      abstained:
+        type: integer
+        minimum: 0
+      method:
+        type: string
+        enum:
+          - consensus
+          - simple_majority
+          - two_thirds_majority
+          - unanimous
+          - chair_decision
+
+  constitutional_compliance:
+    type: object
+    description: "Verification of constitutional rule compliance"
+    required:
+      - verified_by
+      - checks
+    properties:
+      verified_by:
+        type: string
+        description: "Member who verified (usually Parliamentarian)"
+      checks:
+        type: array
+        items:
+          type: object
+          required:
+            - rule
+            - applicable
+            - compliant
+          properties:
+            rule:
+              type: string
+              enum:
+                - legacy_compatibility_first
+                - decimal_for_money
+                - tenant_isolation
+                - state_machine_consistency
+                - performance_budget
+            applicable:
+              type: boolean
+              description: "Whether this rule applies to this decision"
+            compliant:
+              type: boolean
+              description: "Whether decision complies (if applicable)"
+            notes:
+              type: string
+              description: "Any clarifying notes"
+
+  dissenting_opinions:
+    type: array
+    description: "Recorded dissents from the decision"
+    items:
+      type: object
+      required:
+        - member_id
+        - member_name
+        - opinion
+      properties:
+        member_id:
+          type: string
+        member_name:
+          type: string
+        opinion:
+          type: string
+
+  challenges_addressed:
+    type: array
+    description: "Challenges raised by critics and how addressed"
+    items:
+      type: object
+      required:
+        - critic_id
+        - challenge
+        - response
+      properties:
+        critic_id:
+          type: string
+        challenge:
+          type: string
+        response:
+          type: string
+
+  status:
+    type: string
+    description: "Current status of the decision"
+    enum:
+      - approved
+      - rejected
+      - deferred
+      - superseded
+
+  implementation_required:
+    type: boolean
+    description: "Whether this decision requires implementation"
+
+  handoff_id:
+    type: string
+    description: "Reference to handoff document if implementation required"
+    pattern: "^[a-z0-9-]+_handoff$"
+
+  supersedes:
+    type: string
+    description: "ID of decision this one supersedes (if any)"
+    pattern: "^DEC-\\d{4}-\\d{2}-\\d{2}-\\d{3}$"
+
+  tags:
+    type: array
+    description: "Tags for searchability"
+    items:
+      type: string
+
+# Example valid document
+example:
+  id: "DEC-2026-01-14-001"
+  session_id: "2026-01-14_001_receivable-sync"
+  date: "2026-01-14"
+  title: "Use Reactor pattern for Receivable sync workflow"
+  category: "architecture"
+  decision_text: "The committee approves the use of Ash.Reactor for the receivable sync workflow, implementing a multi-step process for validating, transforming, and persisting receivable records from the classic domain."
+  rationale: "Reactor provides built-in compensation for failures and clearer step separation than manual action composition."
+  vote:
+    in_favor: 12
+    opposed: 1
+    abstained: 2
+    method: "simple_majority"
+  constitutional_compliance:
+    verified_by: "L003 - Judge Helena Thornton"
+    checks:
+      - rule: "legacy_compatibility_first"
+        applicable: true
+        compliant: true
+        notes: "Reactor output maps to existing MySQL columns"
+      - rule: "decimal_for_money"
+        applicable: true
+        compliant: true
+      - rule: "tenant_isolation"
+        applicable: true
+        compliant: true
+      - rule: "state_machine_consistency"
+        applicable: true
+        compliant: true
+      - rule: "performance_budget"
+        applicable: true
+        compliant: true
+        notes: "Estimated <150ms for single record"
+  dissenting_opinions:
+    - member_id: "C004"
+      member_name: "Dr. James Morrison"
+      opinion: "Reactor adds unnecessary complexity for what could be a simple action"
+  challenges_addressed:
+    - critic_id: "C004"
+      challenge: "Is Reactor over-engineering for this use case?"
+      response: "The multi-step validation with potential rollback justifies Reactor. Simple actions would require manual compensation."
+  status: "approved"
+  implementation_required: true
+  handoff_id: "2026-01-14_001_receivable-sync_handoff"
+  tags:
+    - "reactor"
+    - "receivable"
+    - "sync"
+    - "classic-domain"
+

@@ -1,0 +1,229 @@
+# Create Committee Workflow
+# Orchestrates the full Genesis process from request to activation
+
+name: Create Committee
+description: Full workflow for spawning a new committee
+version: 1.0.0
+
+triggers:
+  - Human Director requests new committee
+  - Khaos identifies need for new committee
+
+actors:
+  - Khaos (Primordial Architect)
+  - Protogenoi (Lineage determination)
+  - Hephaestus (Divine Smith)
+  - Human Director (Approval authority)
+
+phases:
+  
+  # Phase 1: Invocation
+  invocation:
+    description: Human summons Khaos with a need
+    actor: Human Director
+    
+    steps:
+      - step: Describe Need
+        description: Human describes what domain needs governance
+        output: domain_description
+        
+      - step: Khaos Acknowledges
+        description: Khaos acknowledges and begins deliberation
+        actor: Khaos
+        output: acknowledgment
+
+  # Phase 2: Deliberation
+  deliberation:
+    description: Khaos analyzes the domain and determines approach
+    actor: Khaos
+    
+    steps:
+      - step: Analyze Domain
+        description: Map domain to PayStand context
+        tools:
+          - knowledge_base/paystand_universe.md
+          - knowledge_base/regulatory_framework.md
+        output: domain_analysis
+        
+      - step: Identify Regulations
+        description: Determine applicable regulations
+        tools:
+          - tools/compliance_checker.md
+        output: applicable_regulations
+        
+      - step: Determine Structure
+        description: Select committee structure type
+        tools:
+          - templates/structures/full_committee.yaml
+          - templates/structures/task_force.yaml
+          - templates/structures/working_group.yaml
+        output: structure_type
+        
+      - step: Present Analysis
+        description: Present findings to Human Director
+        output: analysis_presentation
+
+  # Phase 3: Lineage Selection
+  lineage_selection:
+    description: Khaos consults Protogenoi to determine lineage
+    actor: Khaos
+    
+    steps:
+      - step: Map to Lineage
+        description: Use lineage mapper to determine primary lineage
+        tools:
+          - tools/lineage_mapper.md
+        output: primary_lineage
+        
+      - step: Identify Secondary
+        description: Determine if secondary lineage needed
+        output: secondary_lineage
+        
+      - step: Consult Protogenos
+        description: Invoke the appropriate Protogenos for blessing
+        knowledge_base:
+          - knowledge_base/protogenoi/gaia_infrastructure.md
+          - knowledge_base/protogenoi/tartarus_security.md
+          - knowledge_base/protogenoi/eros_innovation.md
+          - knowledge_base/protogenoi/nyx_operations.md
+          - knowledge_base/protogenoi/erebus_risk.md
+        output: lineage_blessing
+        
+      - step: Declare Inheritance
+        description: List inherited critics and rules
+        output: inheritance_declaration
+
+  # Phase 4: Blueprint
+  blueprint:
+    description: Khaos creates the committee blueprint
+    actor: Khaos
+    
+    steps:
+      - step: Define Mission
+        description: Craft mission statement
+        output: mission_statement
+        
+      - step: Define Jurisdiction
+        description: Specify what the committee governs
+        output: jurisdiction
+        
+      - step: Plan Structure
+        description: Determine member roles needed
+        output: member_plan
+        
+      - step: Plan Knowledge Base
+        description: Identify initial knowledge needs
+        output: knowledge_plan
+        
+      - step: Present Blueprint
+        description: Present complete blueprint to Human Director
+        output: blueprint_document
+        
+      - step: Obtain Approval
+        description: Human Director approves blueprint
+        actor: Human Director
+        gate: true
+        output: blueprint_approved
+
+  # Phase 5: Forging (Hephaestus)
+  forging:
+    description: Hephaestus builds the committee
+    actor: Hephaestus
+    
+    steps:
+      - step: Receive Blueprint
+        description: Hephaestus receives approved blueprint
+        input: blueprint_document
+        
+      - step: Create Directory Structure
+        description: Create all required directories
+        output: directory_structure
+        
+      - step: Generate README
+        description: Create README.md from template
+        template: templates/README.template.md
+        output: readme_file
+        
+      - step: Generate Governance
+        description: Create GOVERNANCE.md with inherited rules
+        template: templates/GOVERNANCE.template.md
+        input: lineage_blessing
+        output: governance_file
+        
+      - step: Generate Status
+        description: Create initial STATUS.md
+        output: status_file
+        
+      - step: Craft Personas
+        description: Create individual member files
+        template: templates/member.template.md
+        input: member_plan
+        output: member_files
+        
+      - step: Generate Roster
+        description: Create roster.md
+        template: templates/roster.template.md
+        output: roster_file
+        
+      - step: Seed Knowledge Base
+        description: Create initial knowledge base structure
+        input: knowledge_plan
+        output: knowledge_files
+        
+      - step: Create Session Templates
+        description: Copy session templates
+        templates:
+          - templates/session_goal.template.md
+          - templates/session_decisions.template.md
+          - templates/session_action_items.template.md
+        output: session_templates
+        
+      - step: Validate Structure
+        description: Run committee validator
+        tools:
+          - tools/committee_validator.md
+        gate: true
+        output: validation_result
+
+  # Phase 6: Activation
+  activation:
+    description: Committee is activated and registered
+    actor: Khaos
+    
+    steps:
+      - step: Receive Forged Committee
+        description: Hephaestus returns completed committee
+        input: validation_result
+        
+      - step: Update MAS Status
+        description: Add committee to Khaos STATUS.md
+        file: STATUS.md
+        output: mas_status_updated
+        
+      - step: Declare Activation
+        description: Announce committee is active
+        output: activation_announcement
+        
+      - step: Return to Void
+        description: Khaos returns to dormant state
+        output: workflow_complete
+
+outputs:
+  - committee_directory: Path to created committee
+  - committee_code: Unique committee code
+  - lineage: Primary Protogenos lineage
+  - member_count: Total members created
+  - activation_date: Date committee became active
+
+error_handling:
+  blueprint_rejected:
+    description: Human Director rejects blueprint
+    action: Return to deliberation phase
+    
+  validation_failed:
+    description: Committee structure validation failed
+    action: Hephaestus fixes issues and re-validates
+    
+  forging_error:
+    description: Error during file creation
+    action: Clean up partial files, notify Khaos

@@ -1,0 +1,176 @@
+# Full Committee Structure
+# Used for: Major domains requiring comprehensive coverage
+# Typical size: 20-30 members
+
+name: Full Committee
+description: >
+  A fully-staffed committee with comprehensive coverage.
+  Suitable for critical domains like Ledger, Security, or Platform.
+
+minimum_members: 15
+recommended_members: 20-25
+
+structure:
+  leadership:
+    required: true
+    minimum: 3
+    roles:
+      - id: L001
+        role: Chair
+        required: true
+        description: Session orchestration, decision routing
+        
+      - id: L002
+        role: Vice Chair
+        required: true
+        description: Cross-domain coordination, Chair backup
+        
+      - id: L003
+        role: Parliamentarian
+        required: true
+        description: Governance enforcement, constitutional interpretation
+
+  domain_experts:
+    required: true
+    minimum: 5
+    description: >
+      Subject matter experts with deep knowledge of the domain.
+      Should cover all major sub-domains.
+    
+    suggested_specialties:
+      - Primary domain expertise
+      - Secondary domain expertise
+      - Integration expertise
+      - Historical/legacy expertise
+      - Edge case expertise
+
+  critics:
+    required: true
+    minimum: 4
+    description: >
+      Challengers who question assumptions and find risks.
+      MUST include Protogenos-inherited critics.
+    
+    mandatory_from_protogenos: true
+    
+    roles:
+      - id: C001
+        role: Primary Auditor
+        required: true
+        block_authority: true
+        description: Main validation focus from Protogenos
+        
+      - id: C002
+        role: Secondary Auditor
+        required: true
+        block_authority: true
+        description: Secondary validation focus
+        
+      - id: C003
+        role: Root Cause Analyst
+        required: true
+        block_authority: false
+        description: Why did this happen? Will it recur?
+        
+      - id: C004
+        role: Legal/Compliance Critic
+        required: true
+        block_authority: true
+        description: Regulatory compliance verification
+        
+      - id: C005
+        role: Complexity Critic
+        required: false
+        block_authority: false
+        description: Is there a simpler solution?
+        
+      - id: C006
+        role: Final Validator
+        required: true
+        block_authority: true
+        description: Ultimate sign-off before external actions
+
+  technical_specialists:
+    required: false
+    minimum: 0
+    description: >
+      Technical experts for specific tools or systems.
+      Include as needed based on domain.
+    
+    suggested_roles:
+      - Database Specialist
+      - API Specialist
+      - Script Expert
+
+  fraud_dispute:
+    required: false
+    minimum: 0
+    description: >
+      Specialists for fraud detection and dispute resolution.
+      Required for financial/payment domains.
+    
+    suggested_roles:
+      - Fraud Specialist
+      - Dispute Specialist
+
+  clerical:
+    required: true
+    minimum: 2
+    roles:
+      - id: CL001
+        role: Recording Clerk
+        required: true
+        description: Maintains STATUS.md and session logs
+        
+      - id: CL002
+        role: Research Clerk
+        required: true
+        description: Runs queries and fetches external data
+
+directory_structure:
+  - README.md
+  - GOVERNANCE.md
+  - STATUS.md
+  - members/
+    - roster.md
+    - leadership/
+    - domain_experts/
+    - critics/
+    - technical_specialists/
+    - fraud_dispute/
+    - clerical/
+  - knowledge_base/
+  - sessions/
+    - _templates/
+      - goal.md
+      - transcript.md
+      - decisions.md
+      - action_items.md
+  - tools/
+  - workflows/
+
+quorum_rules:
+  full_committee:
+    minimum: 5
+    requirements:
+      - Chair or Vice Chair
+      - At least 1 Critic
+      - At least 2 Domain Experts
+      
+  focused_analysis:
+    minimum: 3
+    requirements:
+      - Chair
+      - 2 relevant experts
+      
+  emergency:
+    minimum: 3
+    requirements:
+      - Chair
+      - 2 most relevant members
+
+use_cases:
+  - Ledger operations (financial integrity)
+  - Security governance (platform security)
+  - Platform architecture (core infrastructure)
+  - Compliance oversight (regulatory matters)

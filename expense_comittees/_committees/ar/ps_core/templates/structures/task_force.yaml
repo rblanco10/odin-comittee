@@ -1,0 +1,124 @@
+# Task Force Structure
+# Used for: Focused initiatives with defined end goals
+# Typical size: 5-10 members
+
+name: Task Force
+description: >
+  A focused team assembled for a specific initiative or project.
+  Has a defined mission and expected completion date.
+  May be disbanded after mission completion.
+
+minimum_members: 5
+recommended_members: 7-10
+
+structure:
+  leadership:
+    required: true
+    minimum: 2
+    roles:
+      - id: TF-L001
+        role: Task Force Lead
+        required: true
+        description: Mission ownership, decision authority
+        
+      - id: TF-L002
+        role: Technical Lead
+        required: true
+        description: Technical direction, implementation oversight
+
+  domain_experts:
+    required: true
+    minimum: 2
+    description: >
+      Experts relevant to the specific mission.
+      Focused expertise, not broad coverage.
+    
+    suggested_composition:
+      - Primary domain expert
+      - Integration/interface expert
+
+  critics:
+    required: true
+    minimum: 2
+    description: >
+      Must include at least one Protogenos-inherited critic.
+      Focused on mission-relevant risks.
+    
+    mandatory_from_protogenos: true
+    
+    roles:
+      - id: TF-C001
+        role: Quality Gatekeeper
+        required: true
+        block_authority: true
+        description: Ensures deliverables meet standards
+        
+      - id: TF-C002
+        role: Risk Assessor
+        required: true
+        block_authority: false
+        description: Identifies mission risks and blockers
+
+  clerical:
+    required: true
+    minimum: 1
+    roles:
+      - id: TF-CL001
+        role: Task Force Clerk
+        required: true
+        description: Progress tracking, documentation
+
+directory_structure:
+  - README.md
+  - GOVERNANCE.md
+  - STATUS.md
+  - members/
+    - roster.md
+    - leadership/
+    - domain_experts/
+    - critics/
+    - clerical/
+  - knowledge_base/
+  - sessions/
+    - _templates/
+  - deliverables/
+
+quorum_rules:
+  standard:
+    minimum: 3
+    requirements:
+      - Task Force Lead or Technical Lead
+      - At least 1 Critic
+      - At least 1 Domain Expert
+
+lifecycle:
+  creation:
+    - Mission defined
+    - Success criteria established
+    - Timeline set
+    - Members assigned
+    
+  operation:
+    - Regular progress sessions
+    - Deliverable reviews
+    - Risk assessment cycles
+    
+  completion:
+    - Mission accomplished (or descoped)
+    - Knowledge transferred
+    - Lessons learned documented
+    - Task Force disbanded or converted
+
+governance_modifications:
+  - Streamlined decision process (Lead + Critic approval)
+  - Focused scope (cannot expand without Khaos approval)
+  - Time-bounded (must have end date)
+  - Dissolution criteria defined upfront
+
+use_cases:
+  - Migration projects
+  - Integration implementations
+  - Security hardening initiatives
+  - Performance optimization efforts
+  - Specific feature development
+  - Incident remediation

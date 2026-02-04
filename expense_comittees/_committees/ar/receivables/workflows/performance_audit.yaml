@@ -1,0 +1,97 @@
+name: Performance Audit
+version: "1.0"
+description: >
+  Verify that implementations meet performance budgets.
+  Critical for list pages and query-intensive operations.
+
+triggers:
+  - New query-intensive feature implemented
+  - Performance concern raised
+  - List page implementation
+  - Batch operation implementation
+
+participants:
+  required:
+    - SC12 Lead / Performance Skeptic (C002)
+    - MySQL Technical Specialist (TS004)
+    - PostgreSQL Technical Specialist (TS005)
+    - Performance Testing Specialist (QA003)
+  optional:
+    - Algorithms Specialist (TS008)
+    - Relevant domain expert
+
+phases:
+  - name: Query Analysis
+    owner: Research Clerk (CL002)
+    activities:
+      - Identify all queries in the feature
+      - Count query executions
+      - Note nested loops
+      - Identify N+1 patterns
+    outputs:
+      - Query inventory
+    next: Index Verification
+
+  - name: Index Verification
+    owner: MySQL/PostgreSQL Specialist
+    activities:
+      - Run EXPLAIN on each query
+      - Verify indexes are used
+      - Identify full table scans
+      - Note index recommendations
+    outputs:
+      - EXPLAIN analysis
+      - Index recommendations
+    next: Scale Projection
+
+  - name: Scale Projection
+    owner: Performance Skeptic (C002)
+    activities:
+      - Estimate performance at 1K records
+      - Estimate performance at 10K records
+      - Estimate performance at 100K records
+      - Estimate performance at 1M records
+    outputs:
+      - Scale projection chart
+    next: Budget Comparison
+
+  - name: Budget Comparison
+    owner: Performance Skeptic (C002)
+    activities:
+      - Compare to performance budget
+      - List pages: <200ms, 5 queries
+      - Detail pages: <150ms, 3 queries
+      - Search: <100ms, 2 queries
+    outputs:
+      - Budget compliance report
+    next: Verdict
+
+  - name: Verdict
+    owner: Performance Skeptic (C002)
+    activities:
+      - Issue performance verdict
+      - List required optimizations
+      - Approve or block
+    outputs:
+      - Performance verdict
+    checkpoint: true
+    next: complete
+
+human_checkpoints:
+  - after: Scale Projection
+    type: optional_redirect
+    reason: "Human can request testing at specific scale or adjust budget thresholds"
+  - after: Budget Comparison
+    type: optional_redirect
+    reason: "Human can grant exceptions for justified budget overruns"
+  - after: Verdict
+    type: approval_required
+    reason: "Performance failures require Human Director decision to proceed, optimize, or block"
+
+outputs:
+  - Performance audit report
+  - Query analysis
+  - Scale projections
+  - Optimization recommendations
+  - Approval or rejection with specific issues
+

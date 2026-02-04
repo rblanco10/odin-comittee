@@ -1,0 +1,241 @@
+# Audit Committee Workflow
+# Validates an existing committee's structure and compliance
+
+name: Audit Committee
+description: Comprehensive audit of an existing committee
+version: 1.0.0
+
+triggers:
+  - Human Director requests audit
+  - Periodic scheduled audit
+  - Khaos identifies potential issues
+
+actors:
+  - Khaos (Auditor)
+  - Human Director (Review authority)
+
+phases:
+
+  # Phase 1: Initiation
+  initiation:
+    description: Audit is initiated
+    actor: Human Director
+    
+    steps:
+      - step: Identify Target
+        description: Specify committee to audit
+        output: target_committee
+        
+      - step: Define Scope
+        description: Full audit or specific areas
+        options:
+          - full_audit
+          - structure_only
+          - compliance_only
+          - membership_only
+        output: audit_scope
+
+  # Phase 2: Structural Audit
+  structural_audit:
+    description: Validate committee structure
+    actor: Khaos
+    condition: scope includes structure
+    
+    steps:
+      - step: Check Required Files
+        description: Verify all required files exist
+        checklist:
+          - README.md
+          - GOVERNANCE.md
+          - STATUS.md
+          - members/roster.md
+        output: file_check_results
+        
+      - step: Check Directory Structure
+        description: Verify directory hierarchy
+        expected:
+          - members/leadership/
+          - members/domain_experts/
+          - members/critics/
+          - members/clerical/
+          - knowledge_base/
+          - sessions/_templates/
+        output: directory_check_results
+        
+      - step: Validate Templates
+        description: Verify session templates exist
+        output: template_check_results
+
+  # Phase 3: Membership Audit
+  membership_audit:
+    description: Validate committee membership
+    actor: Khaos
+    condition: scope includes membership
+    
+    steps:
+      - step: Count Members
+        description: Verify minimum member requirements
+        tools:
+          - tools/committee_validator.md
+        output: member_count_results
+        
+      - step: Validate Critics
+        description: Verify critic requirements met
+        checks:
+          - minimum_2_critics
+          - protogenos_critics_present
+          - block_authority_exists
+          - final_validator_if_needed
+        output: critic_validation_results
+        
+      - step: Check Member Files
+        description: Validate each member file has required sections
+        output: member_file_results
+        
+      - step: Verify Roster
+        description: Ensure roster.md matches actual members
+        output: roster_validation_results
+
+  # Phase 4: Governance Audit
+  governance_audit:
+    description: Validate governance document
+    actor: Khaos
+    condition: scope includes governance
+    
+    steps:
+      - step: Check Required Articles
+        description: Verify all governance articles present
+        tools:
+          - tools/committee_validator.md
+        output: article_check_results
+        
+      - step: Verify Protogenos Inheritance
+        description: Ensure lineage rules are present
+        input: committee_lineage
+        output: inheritance_check_results
+        
+      - step: Check Constitutional Rules
+        description: Verify domain-specific rules defined
+        output: rules_check_results
+
+  # Phase 5: Compliance Audit
+  compliance_audit:
+    description: Validate regulatory compliance coverage
+    actor: Khaos
+    condition: scope includes compliance
+    
+    steps:
+      - step: Identify Applicable Regulations
+        description: Determine what regulations apply
+        tools:
+          - tools/compliance_checker.md
+        output: applicable_regulations
+        
+      - step: Check Coverage
+        description: Verify each regulation is addressed
+        output: coverage_results
+        
+      - step: Validate Legal Critic
+        description: Ensure Legal Critic has appropriate authority
+        output: legal_critic_results
+
+  # Phase 6: Knowledge Base Audit
+  knowledge_base_audit:
+    description: Validate knowledge base quality
+    actor: Khaos
+    condition: scope includes full_audit
+    
+    steps:
+      - step: Check Structure
+        description: Verify knowledge base organization
+        output: kb_structure_results
+        
+      - step: Check References
+        description: Verify references to Khaos knowledge base
+        output: kb_reference_results
+        
+      - step: Check Currency
+        description: Identify stale or outdated content
+        output: kb_currency_results
+
+  # Phase 7: Report Generation
+  report_generation:
+    description: Generate audit report
+    actor: Khaos
+    
+    steps:
+      - step: Compile Findings
+        description: Aggregate all audit results
+        input:
+          - file_check_results
+          - directory_check_results
+          - member_count_results
+          - critic_validation_results
+          - article_check_results
+          - inheritance_check_results
+          - coverage_results
+        output: compiled_findings
+        
+      - step: Classify Issues
+        description: Categorize by severity
+        categories:
+          - PASS (requirement met)
+          - WARNING (non-critical issue)
+          - FAIL (critical requirement missing)
+          - BLOCK (constitutional violation)
+        output: classified_issues
+        
+      - step: Generate Recommendations
+        description: Create improvement recommendations
+        output: recommendations
+        
+      - step: Determine Verdict
+        description: Overall audit verdict
+        verdicts:
+          - COMPLIANT
+          - NEEDS_ATTENTION
+          - NON_COMPLIANT
+          - SUSPENDED (if BLOCK issues)
+        output: audit_verdict
+        
+      - step: Create Report
+        description: Generate formal audit report
+        format: markdown
+        output: audit_report
+
+  # Phase 8: Remediation (if needed)
+  remediation:
+    description: Address critical issues
+    actor: Khaos
+    condition: audit_verdict in [NON_COMPLIANT, SUSPENDED]
+    
+    steps:
+      - step: Present Report
+        description: Present findings to Human Director
+        input: audit_report
+        
+      - step: Agree Remediation
+        description: Human Director approves remediation plan
+        actor: Human Director
+        gate: true
+        output: remediation_approved
+        
+      - step: Execute Fixes
+        description: Fix critical issues
+        condition: remediation_approved
+        output: fixes_applied
+        
+      - step: Re-audit
+        description: Re-run relevant audit sections
+        output: re_audit_results
+        
+      - step: Update Verdict
+        description: Update audit verdict based on fixes
+        output: final_verdict
+
+outputs:
+  - audit_report: Formal audit document
+  - verdict: COMPLIANT | NEEDS_ATTENTION | NON_COMPLIANT | SUSPENDED
+  - critical_issues: List of FAIL/BLOCK findings
+  - recommendations: List of improvements
+  - remediation_status: If remediation was performed

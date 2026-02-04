@@ -1,0 +1,104 @@
+# Working Group Structure
+# Used for: Ongoing advisory or specialized focus
+# Typical size: 3-5 members
+
+name: Working Group
+description: >
+  A small, nimble group for specialized topics or ongoing advisory.
+  Lightweight governance with rapid decision-making.
+  May escalate to Task Force or Full Committee if scope grows.
+
+minimum_members: 3
+recommended_members: 4-5
+
+structure:
+  leadership:
+    required: true
+    minimum: 1
+    roles:
+      - id: WG-L001
+        role: Working Group Lead
+        required: true
+        description: Facilitation, coordination, decision authority
+
+  domain_experts:
+    required: true
+    minimum: 1
+    description: >
+      At least one expert in the working group's focus area.
+    
+    suggested_composition:
+      - Primary subject matter expert
+
+  critics:
+    required: true
+    minimum: 1
+    description: >
+      Even small groups need a challenger.
+      Inherits from Protogenos but may be single critic.
+    
+    mandatory_from_protogenos: true
+    
+    roles:
+      - id: WG-C001
+        role: Working Group Critic
+        required: true
+        block_authority: true
+        description: Challenges assumptions, ensures quality
+
+  clerical:
+    required: false
+    minimum: 0
+    description: >
+      Optional for working groups.
+      Lead may handle documentation.
+    
+    roles:
+      - id: WG-CL001
+        role: Notetaker
+        required: false
+        description: Optional documentation support
+
+directory_structure:
+  - README.md
+  - GOVERNANCE.md
+  - STATUS.md
+  - members/
+    - roster.md
+  - knowledge_base/
+  - sessions/
+  - outputs/
+
+quorum_rules:
+  standard:
+    minimum: 2
+    requirements:
+      - Working Group Lead
+      - At least 1 other member (Expert or Critic)
+
+governance_modifications:
+  - Simplified decision process (Lead decision with Critic review)
+  - Informal session format allowed
+  - Can escalate to larger structure if needed
+  - Regular check-ins rather than formal sessions
+
+escalation_triggers:
+  to_task_force:
+    - Scope exceeds original definition
+    - More than 5 members needed
+    - Formal deliverables required
+    - Cross-committee coordination needed
+    
+  to_full_committee:
+    - Domain becomes critical to operations
+    - Regulatory oversight required
+    - Ongoing, indefinite mission
+    - Multiple sub-domains to cover
+
+use_cases:
+  - Standards advisory (coding standards, API design)
+  - Research groups (exploring new technologies)
+  - Cross-committee liaison
+  - Specialized topics (accessibility, i18n)
+  - Experimental initiatives
+  - Documentation working group

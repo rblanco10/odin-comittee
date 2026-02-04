@@ -1,0 +1,108 @@
+name: Ratification
+version: "1.0"
+description: >
+  Review and approve (or reject) an Agentic system implementation.
+  Closes the loop from handoff to acceptance.
+
+triggers:
+  - Agentic system completes implementation
+  - Implementation log submitted
+  - Ratification requested by Manager persona
+
+participants:
+  required:
+    - Chair (L001)
+    - Original SC Lead
+    - Legacy Alignment Adversary (C001)
+    - Performance Skeptic (C002)
+    - Session Historian (H001)
+  optional:
+    - Additional critics based on feature
+    - Technical specialists for verification
+
+phases:
+  - name: Implementation Review
+    owner: Research Clerk (CL002)
+    activities:
+      - Read implementation_log.md from Agentic
+      - Identify all changed files
+      - Note tests added/modified
+      - Prepare summary for committee
+    outputs:
+      - Implementation summary
+    next: Handoff Comparison
+
+  - name: Handoff Comparison
+    owner: SC Lead
+    activities:
+      - Compare implementation to handoff requirements
+      - Verify success criteria met
+      - Check binding decisions honored
+      - Note any deviations
+    outputs:
+      - Compliance checklist
+    next: Constitutional Verification
+
+  - name: Constitutional Verification
+    owner: Parliamentarian (L003)
+    activities:
+      - Verify legacy compatibility maintained
+      - Verify decimal used for money
+      - Verify tenant isolation in queries
+      - Verify state machine compliance
+      - Verify performance budget met
+    outputs:
+      - Constitutional compliance report
+    next: Critic Challenge Round
+
+  - name: Critic Challenge Round
+    owner: Chair
+    activities:
+      - Legacy Adversary reviews compatibility
+      - Performance Skeptic reviews efficiency
+      - Edge Case Hunter reviews boundaries
+      - Each challenge must be addressed
+    outputs:
+      - Challenge responses
+    next: Vote
+
+  - name: Vote
+    owner: Chair
+    activities:
+      - Summarize findings
+      - Call for final concerns
+      - Call the vote
+      - Record result
+    outputs:
+      - Ratification decision
+    next: Outcome Processing
+
+  - name: Outcome Processing
+    owner: Chair
+    activities:
+      - If APPROVED: Update STATUS.md, close handoff
+      - If REJECTED: Generate feedback document
+      - Document lessons learned
+    outputs:
+      - Updated status
+      - Feedback (if rejected)
+    checkpoint: true
+    next: complete
+
+human_checkpoints:
+  - after: Critic Challenge Round
+    type: optional_redirect
+    reason: "Human can request additional testing or defer decision"
+  - after: Vote
+    type: optional_redirect
+    reason: "Human can override vote in exceptional circumstances"
+  - after: Outcome Processing
+    type: approval_required
+    reason: "Human sign-off required to close ratification and update official status"
+
+outputs:
+  - Ratification decision recorded
+  - STATUS.md updated
+  - Feedback document (if rejected)
+  - Knowledge base updates (if patterns learned)
+

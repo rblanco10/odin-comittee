@@ -1,0 +1,96 @@
+name: Legacy Alignment Check
+version: "1.0"
+description: >
+  Verify that proposed changes maintain Loopback2/MySQL compatibility.
+  Critical for Classic domain changes.
+
+triggers:
+  - New Classic domain resource proposed
+  - Column mapping changes
+  - Status value changes
+  - MySQL schema modifications
+
+participants:
+  required:
+    - SC11 Lead / Legacy Alignment Adversary (C001)
+    - Migration Historian (H003)
+    - Legacy Systems Specialist (IS004)
+    - MySQL Technical Specialist (TS004)
+  optional:
+    - Data Modeling Specialist (TS007)
+    - Relevant domain expert
+
+phases:
+  - name: Change Identification
+    owner: Research Clerk (CL002)
+    activities:
+      - Identify all affected columns
+      - List status value changes
+      - Note relationship changes
+      - Document schema impact
+    outputs:
+      - Change inventory
+    next: Loopback2 Model Review
+
+  - name: Loopback2 Model Review
+    owner: Legacy Systems Specialist (IS004)
+    activities:
+      - Find corresponding model in roadrunner_samples/
+      - Compare column names
+      - Compare data types
+      - Compare status enums
+    outputs:
+      - Model comparison report
+    next: Column Mapping Verification
+
+  - name: Column Mapping Verification
+    owner: MySQL Technical Specialist (TS004)
+    activities:
+      - Verify source: options correct
+      - Check camelCase mappings
+      - Verify nullable consistency
+      - Check default values
+    outputs:
+      - Column mapping checklist
+    next: Round-Trip Testing
+
+  - name: Round-Trip Testing
+    owner: Legacy Systems Specialist (IS004)
+    activities:
+      - Create record in Ash
+      - Read record in Loopback2 (simulated)
+      - Create record in Loopback2 (simulated)
+      - Read record in Ash
+    outputs:
+      - Round-trip test results
+    next: Verdict
+
+  - name: Verdict
+    owner: Legacy Alignment Adversary (C001)
+    activities:
+      - Review all findings
+      - Issue compatibility verdict
+      - Document any concerns
+      - Approve or block
+    outputs:
+      - Legacy alignment verdict
+    checkpoint: true
+    next: complete
+
+human_checkpoints:
+  - after: Loopback2 Model Review
+    type: optional_redirect
+    reason: "Human can request deeper investigation of specific models"
+  - after: Round-Trip Testing
+    type: optional_redirect
+    reason: "Human can request additional test scenarios"
+  - after: Verdict
+    type: approval_required
+    reason: "Legacy alignment failures require Human Director decision to proceed or block"
+
+outputs:
+  - Legacy alignment verification report
+  - Column mapping checklist
+  - Round-trip test results
+  - Approval or rejection with specific issues
+

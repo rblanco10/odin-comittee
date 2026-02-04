@@ -1,0 +1,393 @@
+# Ratification Report Schema
+# Version: 1.0
+# Used in: Ratification workflow
+# Validated by: Chair, Recording Clerk
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: Ratification Report
+description: Schema for ratification reports that close the implementation loop
+version: "1.0"
+
+type: object
+required:
+  - ratification_id
+  - handoff_reference
+  - implementation_review
+  - compliance_verification
+  - critic_challenges
+  - vote
+  - outcome
+  - date
+
+properties:
+  ratification_id:
+    type: string
+    description: "Unique ratification identifier"
+    pattern: "^RAT-\\d{4}-\\d{2}-\\d{2}-\\d{3}$"
+    example: "RAT-2026-01-15-001"
+
+  handoff_reference:
+    type: object
+    description: "Reference to the original handoff"
+    required:
+      - handoff_id
+      - session_id
+      - decision_id
+    properties:
+      handoff_id:
+        type: string
+      session_id:
+        type: string
+      decision_id:
+        type: string
+
+  date:
+    type: string
+    format: date
+    description: "Date ratification was conducted"
+
+  implementation_review:
+    type: object
+    description: "Summary of what was implemented"
+    required:
+      - reviewed_by
+      - files_changed
+      - tests_added
+      - implementation_log_reviewed
+    properties:
+      reviewed_by:
+        type: object
+        properties:
+          member_id:
+            type: string
+          name:
+            type: string
+      files_changed:
+        type: array
+        items:
+          type: string
+      tests_added:
+        type: array
+        items:
+          type: string
+      implementation_log_reviewed:
+        type: boolean
+      summary:
+        type: string
+        description: "Brief summary of implementation"
+      deviations:
+        type: array
+        description: "Any deviations from handoff specification"
+        items:
+          type: object
+          properties:
+            deviation:
+              type: string
+            justification:
+              type: string
+            acceptable:
+              type: boolean
+
+  success_criteria_verification:
+    type: array
+    description: "Verification of each success criterion from handoff"
+    items:
+      type: object
+      required:
+        - criterion
+        - verified
+        - evidence
+      properties:
+        criterion:
+          type: string
+        verified:
+          type: boolean
+        evidence:
+          type: string
+          description: "How this was verified (test name, manual check, etc.)"
+        notes:
+          type: string
+
+  compliance_verification:
+    type: object
+    description: "Constitutional compliance check on implementation"
+    required:
+      - verified_by
+      - checks
+    properties:
+      verified_by:
+        type: object
+        properties:
+          member_id:
+            type: string
+          name:
+            type: string
+      checks:
+        type: array
+        items:
+          type: object
+          required:
+            - rule
+            - applicable
+            - compliant
+          properties:
+            rule:
+              type: string
+              enum:
+                - legacy_compatibility_first
+                - decimal_for_money
+                - tenant_isolation
+                - state_machine_consistency
+                - performance_budget
+            applicable:
+              type: boolean
+            compliant:
+              type: boolean
+            evidence:
+              type: string
+              description: "How compliance was verified"
+            issues:
+              type: array
+              items:
+                type: string
+
+  critic_challenges:
+    type: array
+    description: "Challenges raised during ratification review"
+    items:
+      type: object
+      required:
+        - critic_id
+        - challenge
+        - resolved
+      properties:
+        critic_id:
+          type: string
+        critic_name:
+          type: string
+        challenge:
+          type: string
+        response:
+          type: string
+        resolved:
+          type: boolean
+        blocking:
+          type: boolean
+          description: "Was this a blocking concern?"
+
+  vote:
+    type: object
+    description: "Ratification vote results"
+    required:
+      - approve
+      - reject
+      - abstain
+      - result
+    properties:
+      approve:
+        type: integer
+        minimum: 0
+      reject:
+        type: integer
+        minimum: 0
+      abstain:
+        type: integer
+        minimum: 0
+      result:
+        type: string
+        enum:
+          - approved
+          - rejected
+          - deferred
+      threshold:
+        type: string
+        description: "What threshold was required"
+        example: "simple majority"
+
+  outcome:
+    type: object
+    description: "Final outcome of ratification"
+    required:
+      - status
+      - processed_by
+    properties:
+      status:
+        type: string
+        enum:
+          - approved
+          - rejected
+          - deferred
+      processed_by:
+        type: object
+        properties:
+          member_id:
+            type: string
+          name:
+            type: string
+      approval_notes:
+        type: string
+        description: "Notes on approval (if approved)"
+      rejection_reasons:
+        type: array
+        description: "Specific reasons for rejection (if rejected)"
+        items:
+          type: string
+      required_fixes:
+        type: array
+        description: "What must be fixed before re-ratification (if rejected)"
+        items:
+          type: object
+          properties:
+            issue:
+              type: string
+            severity:
+              type: string
+              enum:
+                - critical
+                - major
+                - minor
+            assigned_to:
+              type: string
+      deferral_reason:
+        type: string
+        description: "Why ratification was deferred (if deferred)"
+
+  lessons_learned:
+    type: array
+    description: "Insights to add to knowledge base"
+    items:
+      type: object
+      properties:
+        lesson:
+          type: string
+        category:
+          type: string
+        add_to_knowledge_base:
+          type: boolean
+
+  status_updates:
+    type: object
+    description: "Status updates to be made"
+    properties:
+      handoff_status:
+        type: string
+        enum:
+          - completed
+          - rejected
+          - pending_fixes
+      session_status:
+        type: string
+        enum:
+          - closed
+          - pending
+      knowledge_base_updates:
+        type: array
+        items:
+          type: string
+
+# Example valid document
+example:
+  ratification_id: "RAT-2026-01-15-001"
+  handoff_reference:
+    handoff_id: "2026-01-14_001_receivable-sync_handoff"
+    session_id: "2026-01-14_001_receivable-sync"
+    decision_id: "DEC-2026-01-14-001"
+  date: "2026-01-15"
+  
+  implementation_review:
+    reviewed_by:
+      member_id: "CL002"
+      name: "David Park"
+    files_changed:
+      - "lib/flame_ps_ar/classic/domain/receivable.ex"
+      - "lib/flame_ps_ar/classic/domain/receivable/sync_reactor.ex"
+      - "test/flame_ps_ar/classic/domain/receivable_test.exs"
+    tests_added:
+      - "test_receivable_round_trip_compatibility"
+      - "test_receivable_sync_performance"
+    implementation_log_reviewed: true
+    summary: "Implemented Receivable sync reactor with 3-step validation, transformation, and persistence. All success criteria addressed."
+    deviations:
+      - deviation: "Added additional logging step not in original spec"
+        justification: "Required for debugging sync issues in production"
+        acceptable: true
+
+  success_criteria_verification:
+    - criterion: "Receivable created in Ash can be read by Loopback2"
+      verified: true
+      evidence: "test_receivable_round_trip_compatibility passes"
+    - criterion: "All financial fields use Decimal type"
+      verified: true
+      evidence: "Schema inspection confirms :decimal type for amount, balance, paid_amount"
+    - criterion: "Sync completes in under 150ms for single record"
+      verified: true
+      evidence: "test_receivable_sync_performance: avg 87ms, max 142ms"
+
+  compliance_verification:
+    verified_by:
+      member_id: "L003"
+      name: "Judge Helena Thornton"
+    checks:
+      - rule: "legacy_compatibility_first"
+        applicable: true
+        compliant: true
+        evidence: "Round-trip test passes; column mapping verified"
+      - rule: "decimal_for_money"
+        applicable: true
+        compliant: true
+        evidence: "Schema shows :decimal for all money fields"
+      - rule: "tenant_isolation"
+        applicable: true
+        compliant: true
+        evidence: "All queries include owner_id; verified in code review"
+      - rule: "state_machine_consistency"
+        applicable: true
+        compliant: true
+        evidence: "Only created/active/inactive statuses; no 'removed'"
+      - rule: "performance_budget"
+        applicable: true
+        compliant: true
+        evidence: "Performance test: 87ms avg, 3 queries max"
+
+  critic_challenges:
+    - critic_id: "C001"
+      critic_name: "Dr. Victor Kozlov"
+      challenge: "Verify the camelCase column mapping is correct for all fields"
+      response: "Verified against roadrunner_samples/receivable.js - all mappings match"
+      resolved: true
+      blocking: false
+    - critic_id: "C002"
+      critic_name: "Priya Nakamura"
+      challenge: "How does this perform at scale with 30M records?"
+      response: "Individual sync is O(1); batch sync deferred to separate implementation"
+      resolved: true
+      blocking: false
+
+  vote:
+    approve: 14
+    reject: 0
+    abstain: 1
+    result: "approved"
+    threshold: "simple majority"
+
+  outcome:
+    status: "approved"
+    processed_by:
+      member_id: "L001"
+      name: "Dr. Alexandra Chen"
+    approval_notes: "Implementation meets all success criteria and constitutional requirements. Well-documented and thoroughly tested."
+
+  lessons_learned:
+    - lesson: "Adding logging step to reactors aids production debugging"
+      category: "patterns"
+      add_to_knowledge_base: true
+    - lesson: "Round-trip testing is essential for Classic domain features"
+      category: "testing"
+      add_to_knowledge_base: true
+
+  status_updates:
+    handoff_status: "completed"
+    session_status: "closed"
+    knowledge_base_updates:
+      - "patterns/reactor_patterns.md - add logging step recommendation"
+
