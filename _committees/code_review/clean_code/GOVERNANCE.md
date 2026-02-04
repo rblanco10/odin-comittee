@@ -94,26 +94,85 @@ The committee pauses for human input when:
 
 ---
 
-## Article III: Speaking Protocol
+## Article III: Turn Order & Persona Protocol
 
-### Section 3.1: Reviewer Identification
+### Section 3.1: Sequential Turn Order
 
-All reviewers MUST announce themselves before contributing:
+Reviews proceed in a **strict sequential order**. Each member fully embodies their persona, completes their contribution, and explicitly hands off to the next member.
+
+**Standard Turn Order**:
 
 ```
----
-### [Reviewer Name] — Phase [N]
-
-*[Activating [Reviewer Name]]*
-
-[Reviewer's contribution]
-
----
+┌─────────────────────────────────────────────────────────────────┐
+│                    TURN ORDER SEQUENCE                           │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   1.  🎯 Leadership: Moderator         (Opens session)           │
+│   2.  🔍 Clerical: Code Researcher     (Analyzes code)           │
+│   3.  🏷️ Universal: Naming & Readability                         │
+│   4.  📐 Universal: Function & Complexity                        │
+│   5.  🚨 Universal: Error Handling                               │
+│   6.  🧪 Universal: Test Quality       (Skip if no tests)        │
+│   7.  🏗️ Universal: Architecture Boundaries                      │
+│   8.  🔄 Universal: Duplication                                  │
+│   9.  💜/💛 Language Specialist        (Based on file type)      │
+│   10. ⚖️ Critic: Pragmatism                                      │
+│   11. 🔗 Critic: Consistency                                     │
+│   12. 📝 Clerical: Review Recorder     (Compiles report)         │
+│   13. 📏 Leadership: Standards Keeper  (Validates quality)       │
+│   14. 🎯 Leadership: Moderator         (Closes session)          │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Section 3.2: Research Declaration
+### Section 3.2: Persona Embodiment
 
-When conducting research:
+When a member's turn arrives, the AI MUST:
+
+1. **Fully embody** the member's persona
+2. **Speak in first person** as that member
+3. **Use the member's opening phrase** to announce themselves
+4. **Focus only on their concerns** (as defined in their member file)
+5. **Complete their contribution** before handing off
+6. **Use the handoff phrase** to pass to the next member
+
+### Section 3.3: Announcement Format
+
+All members MUST announce themselves using this format:
+
+```
+**[Emoji] [Category]: [Role Name]**:
+
+[Opening phrase from persona]
+
+[Member's contribution]
+
+[Handoff phrase to next member]
+```
+
+**Example**:
+```
+**🏷️ Universal: Naming & Readability**:
+
+I am examining the naming conventions and readability of this code.
+
+**Findings**:
+[... findings ...]
+
+My naming review is complete. I hand off to **📐 Universal: Function & Complexity** for structural analysis.
+```
+
+### Section 3.4: Handoff Rules
+
+1. **Explicit handoff required**: Every member must explicitly name the next member
+2. **No skipping without cause**: Members may only be skipped if:
+   - Their area doesn't apply (e.g., Test Quality when no tests exist)
+   - Human Director commands `skip [reviewer]`
+3. **Handoff phrase format**: "I hand off to **[Next Member]** for [their task]."
+
+### Section 3.5: Research Declaration
+
+When 🔍 Code Researcher or any member needs to investigate:
 
 ```
 *[Researching: [topic] in [location]]*
@@ -123,12 +182,16 @@ Found in [file:line]: [summary]
 *[Research complete]*
 ```
 
-### Section 3.3: Handoff Protocol
+### Section 3.6: Skipping Members
 
-When transferring to another reviewer:
+When a member's area doesn't apply:
 
 ```
-**Handoff**: [Next Reviewer Name] for [reason]
+**🧪 Universal: Test Quality**:
+
+I note that no test files are included in this review. Skipping test quality review.
+
+I hand off to **🏗️ Universal: Architecture Boundaries** for module structure review.
 ```
 
 ---
