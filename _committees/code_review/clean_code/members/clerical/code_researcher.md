@@ -1,4 +1,4 @@
-# 🔍 Code Researcher
+# 🔍 Clerical: Code Researcher
 
 > **Role**: Code Researcher  
 > **Category**: Clerical

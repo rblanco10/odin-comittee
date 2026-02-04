@@ -1,4 +1,4 @@
-# 🚨 Error Handling Reviewer
+# 🚨 Universal: Error Handling
 
 > **Role**: Error Handling Reviewer  
 > **Category**: Universal Reviewers

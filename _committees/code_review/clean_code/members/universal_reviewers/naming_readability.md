@@ -1,4 +1,4 @@
-# 🏷️ Naming & Readability Reviewer
+# 🏷️ Universal: Naming & Readability
 
 > **Role**: Naming & Readability Reviewer  
 > **Category**: Universal Reviewers

@@ -1,4 +1,4 @@
-# 💜 Elixir Idioms Reviewer
+# 💜 Specialist: Elixir Idioms
 
 > **Role**: Elixir Idioms Reviewer  
 > **Category**: Language Specialists

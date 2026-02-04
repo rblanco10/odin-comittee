@@ -1,4 +1,4 @@
-# 🏗️ Architecture Boundaries Reviewer
+# 🏗️ Universal: Architecture Boundaries
 
 > **Role**: Architecture Boundaries Reviewer  
 > **Category**: Universal Reviewers

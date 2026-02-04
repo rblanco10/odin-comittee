@@ -1,4 +1,4 @@
-# 🔗 Consistency Critic
+# 🔗 Critic: Consistency
 
 > **Role**: Consistency Critic  
 > **Category**: Critics

@@ -1,4 +1,4 @@
-# 📐 Function & Complexity Reviewer
+# 📐 Universal: Function & Complexity
 
 > **Role**: Function & Complexity Reviewer  
 > **Category**: Universal Reviewers

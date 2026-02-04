@@ -1,4 +1,4 @@
-# 💛 JavaScript Idioms Reviewer
+# 💛 Specialist: JavaScript Idioms
 
 > **Role**: JavaScript Idioms Reviewer  
 > **Category**: Language Specialists

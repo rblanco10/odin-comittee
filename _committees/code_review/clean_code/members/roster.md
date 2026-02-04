@@ -7,22 +7,22 @@
 
 ## Quick Reference
 
-| Member | Category | Primary Focus |
-|--------|----------|---------------|
-| 🎯 Moderator | Leadership | Orchestration, consolidation |
-| 📏 Standards Keeper | Leadership | Quality control, severity validation |
-| 🏷️ Naming & Readability Reviewer | Universal | Names, clarity |
-| 📐 Function & Complexity Reviewer | Universal | Function size, SRP |
-| 🚨 Error Handling Reviewer | Universal | Error patterns |
-| 🧪 Test Quality Reviewer | Universal | Test cleanliness |
-| 🏗️ Architecture Boundaries Reviewer | Universal | Module structure |
-| 🔄 Duplication Reviewer | Universal | DRY principle |
-| 💜 Elixir Idioms Reviewer | Specialist | Elixir patterns |
-| 💛 JavaScript Idioms Reviewer | Specialist | JS/TS patterns |
-| ⚖️ Pragmatism Critic | Critic | Practicality |
-| 🔗 Consistency Critic | Critic | Codebase consistency |
-| 📝 Review Recorder | Clerical | Documentation |
-| 🔍 Code Researcher | Clerical | Codebase research |
+| Member | Primary Focus |
+|--------|---------------|
+| 🎯 **Leadership**: Moderator | Orchestration, consolidation |
+| 📏 **Leadership**: Standards Keeper | Quality control, severity validation |
+| 🏷️ **Universal**: Naming & Readability | Names, clarity |
+| 📐 **Universal**: Function & Complexity | Function size, SRP |
+| 🚨 **Universal**: Error Handling | Error patterns |
+| 🧪 **Universal**: Test Quality | Test cleanliness |
+| 🏗️ **Universal**: Architecture Boundaries | Module structure |
+| 🔄 **Universal**: Duplication | DRY principle |
+| 💜 **Specialist**: Elixir Idioms | Elixir patterns |
+| 💛 **Specialist**: JavaScript Idioms | JS/TS patterns |
+| ⚖️ **Critic**: Pragmatism | Practicality |
+| 🔗 **Critic**: Consistency | Codebase consistency |
+| 📝 **Clerical**: Review Recorder | Documentation |
+| 🔍 **Clerical**: Code Researcher | Codebase research |
 
 ---
 
@@ -32,40 +32,40 @@
 
 | Member | File |
 |--------|------|
-| 🎯 Moderator | `leadership/moderator.md` |
-| 📏 Standards Keeper | `leadership/standards_keeper.md` |
+| 🎯 **Leadership**: Moderator | `leadership/moderator.md` |
+| 📏 **Leadership**: Standards Keeper | `leadership/standards_keeper.md` |
 
 ### Universal Reviewers (6)
 
 | Member | File |
 |--------|------|
-| 🏷️ Naming & Readability Reviewer | `universal_reviewers/naming_readability.md` |
-| 📐 Function & Complexity Reviewer | `universal_reviewers/function_complexity.md` |
-| 🚨 Error Handling Reviewer | `universal_reviewers/error_handling.md` |
-| 🧪 Test Quality Reviewer | `universal_reviewers/test_quality.md` |
-| 🏗️ Architecture Boundaries Reviewer | `universal_reviewers/architecture_boundaries.md` |
-| 🔄 Duplication Reviewer | `universal_reviewers/duplication.md` |
+| 🏷️ **Universal**: Naming & Readability | `universal_reviewers/naming_readability.md` |
+| 📐 **Universal**: Function & Complexity | `universal_reviewers/function_complexity.md` |
+| 🚨 **Universal**: Error Handling | `universal_reviewers/error_handling.md` |
+| 🧪 **Universal**: Test Quality | `universal_reviewers/test_quality.md` |
+| 🏗️ **Universal**: Architecture Boundaries | `universal_reviewers/architecture_boundaries.md` |
+| 🔄 **Universal**: Duplication | `universal_reviewers/duplication.md` |
 
 ### Language Specialists (2)
 
 | Member | File |
 |--------|------|
-| 💜 Elixir Idioms Reviewer | `language_specialists/elixir_idioms.md` |
-| 💛 JavaScript Idioms Reviewer | `language_specialists/javascript_idioms.md` |
+| 💜 **Specialist**: Elixir Idioms | `language_specialists/elixir_idioms.md` |
+| 💛 **Specialist**: JavaScript Idioms | `language_specialists/javascript_idioms.md` |
 
 ### Critics (2)
 
 | Member | File |
 |--------|------|
-| ⚖️ Pragmatism Critic | `critics/pragmatism_critic.md` |
-| 🔗 Consistency Critic | `critics/consistency_critic.md` |
+| ⚖️ **Critic**: Pragmatism | `critics/pragmatism_critic.md` |
+| 🔗 **Critic**: Consistency | `critics/consistency_critic.md` |
 
 ### Clerical (2)
 
 | Member | File |
 |--------|------|
-| 📝 Review Recorder | `clerical/review_recorder.md` |
-| 🔍 Code Researcher | `clerical/code_researcher.md` |
+| 📝 **Clerical**: Review Recorder | `clerical/review_recorder.md` |
+| 🔍 **Clerical**: Code Researcher | `clerical/code_researcher.md` |
 
 ---
 
@@ -112,11 +112,11 @@ All members participate:
 
 | Member | Can Override |
 |--------|--------------|
-| 💜 Elixir Idioms | Universal Reviewers on Elixir code |
-| 💛 JavaScript Idioms | Universal Reviewers on JS/TS code |
-| ⚖️ Pragmatism Critic | Any finding (remove/downgrade) |
-| 🔗 Consistency Critic | Any finding (remove/downgrade) |
-| 🎯 Moderator | Final authority on conflicts |
+| 💜 **Specialist**: Elixir Idioms | Universal Reviewers on Elixir code |
+| 💛 **Specialist**: JavaScript Idioms | Universal Reviewers on JS/TS code |
+| ⚖️ **Critic**: Pragmatism | Any finding (remove/downgrade) |
+| 🔗 **Critic**: Consistency | Any finding (remove/downgrade) |
+| 🎯 **Leadership**: Moderator | Final authority on conflicts |
 
 ---
 

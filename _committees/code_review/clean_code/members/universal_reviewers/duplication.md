@@ -1,4 +1,4 @@
-# 🔄 Duplication Reviewer
+# 🔄 Universal: Duplication
 
 > **Role**: Duplication Reviewer  
 > **Category**: Universal Reviewers

@@ -1,4 +1,4 @@
-# 🧪 Test Quality Reviewer
+# 🧪 Universal: Test Quality
 
 > **Role**: Test Quality Reviewer  
 > **Category**: Universal Reviewers

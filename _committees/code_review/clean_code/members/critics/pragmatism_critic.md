@@ -1,4 +1,4 @@
-# ⚖️ Pragmatism Critic
+# ⚖️ Critic: Pragmatism
 
 > **Role**: Pragmatism Critic  
 > **Category**: Critics

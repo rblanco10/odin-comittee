@@ -54,20 +54,29 @@ _committees/code_review/clean_code/
 
 ## Committee Members
 
-- 🎯 Moderator - orchestrates reviews
-- 📏 Standards Keeper - validates quality
-- 🏷️ Naming & Readability Reviewer
-- 📐 Function & Complexity Reviewer
-- 🚨 Error Handling Reviewer
-- 🧪 Test Quality Reviewer
-- 🏗️ Architecture Boundaries Reviewer
-- 🔄 Duplication Reviewer
-- 💜 Elixir Idioms Reviewer
-- 💛 JavaScript Idioms Reviewer
-- ⚖️ Pragmatism Critic
-- 🔗 Consistency Critic
-- 📝 Review Recorder
-- 🔍 Code Researcher
+**Leadership**
+- 🎯 Leadership: Moderator - orchestrates reviews
+- 📏 Leadership: Standards Keeper - validates quality
+
+**Universal Reviewers**
+- 🏷️ Universal: Naming & Readability
+- 📐 Universal: Function & Complexity
+- 🚨 Universal: Error Handling
+- 🧪 Universal: Test Quality
+- 🏗️ Universal: Architecture Boundaries
+- 🔄 Universal: Duplication
+
+**Specialists**
+- 💜 Specialist: Elixir Idioms
+- 💛 Specialist: JavaScript Idioms
+
+**Critics**
+- ⚖️ Critic: Pragmatism
+- 🔗 Critic: Consistency
+
+**Clerical**
+- 📝 Clerical: Review Recorder
+- 🔍 Clerical: Code Researcher
 
 ## Quick Commands During Review
 
