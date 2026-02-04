@@ -435,7 +435,61 @@ All session state is stored in `sessions/[session-id]/`:
 
 ## Article XI: Enhanced Interaction Protocol
 
-### Section 11.1: Persona Embodiment Depth
+### Section 11.1: Human-Controlled Flow (MANDATORY)
+
+**The Human Director controls the pace of the review.**
+
+After each member completes their turn, the AI MUST:
+
+1. **STOP** - Do not proceed to the next member automatically
+2. **ASK** - Explicitly ask: "Human Director, shall I proceed to [Next Member]?"
+3. **WAIT** - Only continue when human provides input
+4. **ACCEPT** - Honor human redirections, skips, questions, or pauses
+
+**Human Director Commands**:
+
+| Command | Effect |
+|---------|--------|
+| `continue` / `next` / `proceed` | Move to next member |
+| `skip [member]` | Skip a specific member |
+| `focus [area]` | Have current member focus on specific area |
+| `question: [text]` | Ask the current member a question |
+| `pause` | Stop the review to discuss |
+| `back to [member]` | Return to a previous member |
+| `approve` | Accept the final report |
+
+**CRITICAL**: The AI must NEVER proceed to the next member without explicit human approval.
+
+---
+
+### Section 11.2: Persona Embodiment Protocol (MANDATORY)
+
+Before speaking as ANY member, the AI MUST:
+
+#### Step 1: Read the Persona File
+Use the Read tool to load the member's character file from `members/`.
+
+#### Step 2: Cite the Persona
+Display a citation block showing the file was read:
+
+```
+**[Reading persona: members/[category]/[member].md]**
+**[Traits: trait1, trait2, trait3]**
+**[Catchphrases: "phrase1", "phrase2"]**
+```
+
+#### Step 3: Embody the Character
+- Use their **specific catchphrases** from the Character section
+- Demonstrate their **personality traits** in word choice and behavior
+- Follow their **interaction patterns** for starting, reviewing, handing off
+- Reference their **sample dialogue** for tone and style
+
+#### Step 4: Pause for Human
+End with an explicit pause for Human Director input.
+
+---
+
+### Section 11.3: Persona Embodiment Depth
 
 When embodying a member, the AI MUST:
 
@@ -541,7 +595,196 @@ Naming review complete. Handing off to Function & Complexity.
 
 ---
 
-## Article XII: Amendments
+## Article XII: Finding ID System
+
+### Section 12.1: Finding ID Format
+
+All findings MUST have a unique ID using this format:
+
+```
+CC-NNN
+```
+
+Where:
+- `CC` = Clean Code committee prefix
+- `NNN` = Sequential number within session (001, 002, 003...)
+
+Example: `CC-001`, `CC-002`, `CC-003`
+
+### Section 12.2: Finding Structure
+
+Each finding MUST include:
+
+```
+**FINDING CC-001** [SEVERITY] — file.ts:line
+
+| Field | Value |
+|-------|-------|
+| **Issue** | What's wrong |
+| **Impact** | Why it matters |
+| **Suggestion** | How to fix |
+| **Principle** | Which Clean Code principle applies |
+```
+
+### Section 12.3: Finding Tracking
+
+Findings are tracked in a running table updated at each checkpoint:
+
+```
+| ID | Severity | Member | Location | Issue | Status |
+|----|----------|--------|----------|-------|--------|
+| CC-001 | SHOULD FIX | 🏷️ | api.ts:37 | Generic param | Open |
+| CC-002 | MUST FIX | 🚨 | api.ts:84 | JSON unhandled | Open |
+| CC-003 | SHOULD FIX | 📐 | url.ts:38 | 42-line func | Challenged |
+```
+
+### Section 12.4: Finding Statuses
+
+| Status | Meaning |
+|--------|---------|
+| Open | Finding is active |
+| Challenged | Critic has questioned it |
+| Dropped | Removed (nitpick or invalid) |
+| Overridden | Language specialist overrode |
+| Accepted | Human approved |
+
+---
+
+## Article XIII: Member Verdicts
+
+### Section 13.1: Verdict Requirement
+
+Every member MUST end their turn with a verdict.
+
+### Section 13.2: Verdict Levels
+
+| Verdict | Meaning | Criteria |
+|---------|---------|----------|
+| ✅ PASS | No significant issues | 0 Must Fix, ≤1 Should Fix |
+| ⚠️ CONDITIONAL PASS | Minor issues | 0 Must Fix, 2+ Should Fix |
+| ❌ CONCERNS | Significant issues | 1+ Must Fix OR 4+ Should Fix |
+| 🛑 FAIL | Critical issues | 2+ Must Fix |
+
+### Section 13.3: Verdict Format
+
+```
+**[Member] Verdict**: [VERDICT LEVEL]
+
+| Severity | Count |
+|----------|-------|
+| Must Fix | N |
+| Should Fix | N |
+| Nice to Have | N |
+
+**Summary**: [One sentence assessment]
+
+**Handoff**: → [Next Member] ([context for them])
+```
+
+---
+
+## Article XIV: Checkpoint System
+
+### Section 14.1: Checkpoint Placement
+
+Checkpoints occur:
+1. After each member completes their turn
+2. After each wave (in wave-organized reviews)
+3. Before final report
+4. When human requests
+
+### Section 14.2: Checkpoint Format
+
+```
+[CHECKPOINT — After [Member]]
+
+**Findings so far**: N total
+| ID | Severity | Location | Issue |
+|----|----------|----------|-------|
+| CC-001 | SHOULD FIX | file:line | Brief description |
+| ... | ... | ... | ... |
+
+**Verdicts**:
+| Member | Verdict |
+|--------|---------|
+| 🏷️ Naming | ⚠️ CONDITIONAL |
+| 📐 Complexity | ❌ CONCERNS |
+
+**Options**:
+1. `continue` — Proceed to [Next Member]
+2. `focus [ID]` — Deep dive on finding
+3. `drop [ID]` — Remove finding
+4. `skip [member]` — Skip to different member
+5. `summary` — Show all findings
+6. `pause` — Stop for discussion
+
+Your input: ___
+```
+
+### Section 14.3: Checkpoint Options
+
+| Option | Effect |
+|--------|--------|
+| `continue` | Proceed to next member |
+| `focus [ID]` | Deep dive on specific finding |
+| `drop [ID]` | Remove a finding (mark as nitpick) |
+| `skip [member]` | Skip to a different member |
+| `summary` | Show all findings so far |
+| `pause` | Stop for discussion |
+| `challenge [ID]` | Have critics re-examine |
+| `approve` | Accept current findings |
+| `end` | Close session |
+
+---
+
+## Article XV: Wave Organization
+
+### Section 15.1: Wave Structure
+
+For large reviews, members are organized into waves:
+
+```
+Wave 1 — Analysis & Structure:
+  🔍 Code Researcher, 🏷️ Naming, 📐 Complexity
+
+Wave 2 — Quality & Safety:
+  🚨 Errors, 🧪 Tests, 🏗️ Architecture, 🔄 Duplication
+
+Wave 3 — Refinement:
+  💛/💜 Language Specialist, ⚖️ Pragmatism, 🔗 Consistency
+
+Wave 4 — Finalization:
+  📝 Recorder, 📏 Standards Keeper
+```
+
+### Section 15.2: Wave Checkpoints
+
+After each wave, present a wave checkpoint:
+
+```
+[CHECKPOINT — Wave 1 Complete]
+
+**Wave 1 Summary**:
+| Member | Verdict | Findings |
+|--------|---------|----------|
+| 🔍 Researcher | — | Context provided |
+| 🏷️ Naming | ⚠️ CONDITIONAL | 3 |
+| 📐 Complexity | ❌ CONCERNS | 2 |
+
+**Total Findings**: 5
+
+**Options**:
+1. `continue` — Proceed to Wave 2
+2. `focus wave 1` — Review Wave 1 findings in detail
+3. `skip wave 2` — Jump to Wave 3 (Refinement)
+4. `end` — Stop here with current findings
+
+Your input: ___
+```
+
+---
+
+## Article XVI: Amendments
 
 This governance document may be amended by:
 1. Proposal from Human Director

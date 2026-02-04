@@ -1,0 +1,4 @@
+# This directory holds session-specific artifacts
+# Each session creates a subdirectory: reviews/[session-id]/
+# Containing: findings.md, gaps.md, decisions.md, summary.md
+

@@ -1,28 +1,59 @@
 # Clean Code Review Report
 
-**PR**: [Title] (#[Number])  
-**Author**: [Name]  
+**Session ID**: CC-[YYYY-MM-DD]-[NNN]  
+**Target**: [File/Module path]  
 **Date**: [YYYY-MM-DD]  
-**Languages**: [Elixir | JavaScript | TypeScript | Mixed]
+**Languages**: [Elixir | JavaScript | TypeScript | Mixed]  
+**Focus**: [Full Audit | Naming Only | Complexity Only | etc.]
 
 ---
 
-## Summary
+## Executive Summary
 
-| | |
-|-|-|
-| **Verdict** | ✅ APPROVED / ⚠️ CHANGES REQUESTED / ❌ BLOCKED |
+| Metric | Value |
+|--------|-------|
+| **Overall Verdict** | ✅ PASS / ⚠️ CONDITIONAL / ❌ CONCERNS / 🛑 FAIL |
 | **Must Fix** | [count] |
 | **Should Fix** | [count] |
 | **Nice to Have** | [count] |
+| **Overrides** | [count] |
+| **Challenges** | [count] |
 
 **Overview**: [2-3 sentences on code quality and main findings]
 
 ---
 
+## All Findings
+
+| ID | Severity | Member | Location | Issue | Status |
+|----|----------|--------|----------|-------|--------|
+| CC-001 | MUST FIX | 🚨 Errors | api.ts:84 | JSON parse unhandled | Open |
+| CC-002 | SHOULD FIX | 🏷️ Naming | api.ts:37 | Generic param name | Open |
+| CC-003 | SHOULD FIX | 📐 Complexity | url.ts:38 | 42-line function | Challenged |
+| CC-004 | NICE TO HAVE | 🏷️ Naming | url.ts:5 | SCREAMING_CASE mutable | Dropped |
+
+---
+
+## Member Verdicts
+
+| Member | Verdict | Findings |
+|--------|---------|----------|
+| 🔍 Code Researcher | — | Context provided |
+| 🏷️ Naming & Readability | ⚠️ CONDITIONAL | 2 |
+| 📐 Function & Complexity | ❌ CONCERNS | 1 |
+| 🚨 Error Handling | 🛑 FAIL | 2 |
+| 🧪 Test Quality | ✅ PASS | 0 |
+| 🏗️ Architecture | ✅ PASS | 0 |
+| 🔄 Duplication | ✅ PASS | 0 |
+| 💛 JavaScript Idioms | ⚠️ CONDITIONAL | 1 override |
+| ⚖️ Pragmatism Critic | — | 1 challenged |
+| 🔗 Consistency Critic | — | 0 challenged |
+
+---
+
 ## Strengths
 
-> What this PR does well (required section)
+> What this code does well
 
 - [Positive observation 1]
 - [Positive observation 2]
@@ -30,173 +61,168 @@
 
 ---
 
-## Must Fix
+## 🔴 Must Fix
 
-> These issues must be addressed before approval. They represent bugs, 
-> significant maintainability problems, or violations that will cause issues.
+> These issues must be addressed. They represent bugs, significant maintainability 
+> problems, or violations that will cause issues.
 
-### MF-001: [Short title]
+### FINDING CC-001 [MUST FIX] — api.ts:84
 
-| | |
-|-|-|
-| **Location** | `path/to/file.ex:42` |
-| **Reviewer** | [Reviewer Name] |
-| **Category** | [Naming | Function | Error Handling | Test | Architecture | Duplication] |
+| Field | Value |
+|-------|-------|
+| **Member** | 🚨 Error Handling |
+| **Issue** | JSON parse errors escape as raw SyntaxErrors |
+| **Impact** | Callers get cryptic errors with no context |
+| **Principle** | Clean Code: Error Handling |
 
 **Current Code**:
-```[language]
-// problematic code here
+```typescript
+async function handleApiResponse(response: Response) {
+  const payload = await response.json()  // Can throw SyntaxError
+  if (!response.ok) {
+    throw new ApiError(payload.error, payload)
+  }
+  return payload
+}
 ```
 
-**Problem**: [Clear explanation of what's wrong]
+**Problem**: If the server returns invalid JSON (e.g., HTML error page), `response.json()` throws a `SyntaxError` with a cryptic message like "Unexpected token < in JSON at position 0".
 
 **Suggested Fix**:
-```[language]
-// improved code here
+```typescript
+async function handleApiResponse(response: Response) {
+  let payload
+  try {
+    payload = await response.json()
+  } catch (e) {
+    const text = await response.text()
+    throw new ApiError(`Failed to parse response: ${text.slice(0, 100)}`, { parseError: e })
+  }
+  if (!response.ok) {
+    throw new ApiError(payload.error, payload)
+  }
+  return payload
+}
 ```
 
-**Why This Matters**: [Explanation of impact on readability/maintainability]
+**Why This Matters**: Imagine debugging at 3am: "SyntaxError: Unexpected token" tells you nothing. "ApiError: Failed to parse response from /api/stats - received HTML" tells you everything.
 
 ---
 
-### MF-002: [Next issue...]
-
-[Same format]
-
----
-
-## Should Fix
+## 🟡 Should Fix
 
 > These issues should be addressed to improve code quality. They represent 
 > Clean Code violations that hurt maintainability but aren't blocking.
 
-### SF-001: [Short title]
+### FINDING CC-002 [SHOULD FIX] — api.ts:37
 
-| | |
-|-|-|
-| **Location** | `path/to/file.ts:15-28` |
-| **Reviewer** | [Reviewer Name] |
-| **Category** | [Category] |
+| Field | Value |
+|-------|-------|
+| **Member** | 🏷️ Naming & Readability |
+| **Issue** | Generic parameter name `extraQuery: unknown[]` |
+| **Impact** | Readers can't understand expected data shape |
+| **Principle** | Clean Code: Meaningful Names |
 
 **Current Code**:
-```[language]
-// current approach
+```typescript
+export function queryToSearchParams(
+  query: DashboardQuery,
+  extraQuery: unknown[] = []
+): string {
 ```
 
-**Problem**: [What could be improved]
+**Problem**: "extraQuery" doesn't reveal what kind of extra query data this is. And `unknown[]` tells us nothing about the shape.
 
 **Suggested Fix**:
-```[language]
-// cleaner approach
+```typescript
+export function queryToSearchParams(
+  query: DashboardQuery,
+  additionalParams: Array<[string, string]> = []
+): string {
 ```
 
-**Why This Matters**: [Benefit of making this change]
+**Why This Matters**: The name should hint at what's expected. A reader shouldn't have to trace through the function to understand the parameter.
 
 ---
 
-## Nice to Have
+### FINDING CC-003 [SHOULD FIX] — url.ts:38-79
+
+| Field | Value |
+|-------|-------|
+| **Member** | 📐 Function & Complexity |
+| **Issue** | `trimURL` is 42 lines with 4 nesting levels |
+| **Impact** | Hard to test, modify, or understand |
+| **Principle** | Clean Code: Small Functions |
+| **Status** | ⚠️ Challenged by ⚖️ Pragmatism |
+
+**Metrics**:
+- Lines: 42
+- Nesting: 4 levels
+- Responsibilities: 3 (URL parsing, truncation, fallback)
+
+**Suggested Fix**: Extract into smaller functions:
+- `truncateHttpUrl(url, maxLength)`
+- `truncatePlainString(str, maxLength)`
+
+**Challenge from ⚖️ Pragmatism**:
+> "This function works and is only called in one place. Is the extraction worth the effort?"
+
+**Resolution**: Keep as SHOULD FIX but lower priority. The function is complex but cohesive.
+
+---
+
+## 🟢 Nice to Have
 
 > Optional improvements that would polish the code. Address if time permits.
 
 | ID | Location | Suggestion | Benefit |
 |----|----------|------------|---------|
-| NH-001 | `file.ex:100` | [Brief suggestion] | [Brief benefit] |
-| NH-002 | `file.js:50` | [Brief suggestion] | [Brief benefit] |
-| NH-003 | `file.ts:75` | [Brief suggestion] | [Brief benefit] |
+| CC-004 | url.ts:5 | Change `SHARED_LINK_AUTH` to camelCase | SCREAMING_CASE implies constant |
+| CC-005 | api.ts:97 | Rename `get` to `apiGet` | More descriptive |
 
 ---
 
 ## Overrides Applied
 
-> Where language specialists or critics overrode universal findings
-
-### Override 1
-
-| | |
-|-|-|
-| **Original Finding** | [What universal reviewer said] |
-| **Override By** | [Elixir Idioms / JavaScript Idioms / Pragmatism Critic / Consistency Critic] |
-| **New Recommendation** | [What we're recommending instead] |
-| **Reason** | [Why the override applies] |
+| Original Finding | By | Resolution | Reason |
+|------------------|-----|------------|--------|
+| "Rename `_fetch`" | 💛 JS Idioms | Keep name | Underscore prefix is idiomatic JS |
 
 ---
 
-## Conflicts Resolved
+## Challenges Applied
 
-> Any disagreements between reviewers and how they were resolved
-
-[If none: "No conflicts arose during this review."]
-
-[If any:]
-
-### Conflict 1
-
-| | |
-|-|-|
-| **Between** | [Reviewer A] vs [Reviewer B] |
-| **Issue** | [What they disagreed about] |
-| **Resolution** | [What was decided] |
-| **Reasoning** | [Why this resolution] |
+| Finding | By | Resolution | Reason |
+|---------|-----|------------|--------|
+| CC-003 (trimURL) | ⚖️ Pragmatism | Downgraded priority | Works, single call site |
 
 ---
 
-## Reviewer Sign-Off
+## Recommendations
 
-### Universal Reviewers
+### Priority 1 (MUST FIX)
+- **CC-001**: Add try-catch around JSON parsing in `handleApiResponse`
 
-| Reviewer | Status |
-|----------|--------|
-| Naming & Readability | ✅ Approved / ⚠️ Changes Requested |
-| Function & Complexity | ✅ Approved / ⚠️ Changes Requested |
-| Error Handling | ✅ Approved / ⚠️ Changes Requested |
-| Test Quality | ✅ Approved / ⚠️ Changes Requested |
-| Architecture Boundaries | ✅ Approved / ⚠️ Changes Requested |
-| Duplication | ✅ Approved / ⚠️ Changes Requested |
+### Priority 2 (SHOULD FIX)
+- **CC-002**: Rename generic parameters for clarity
+- **CC-003**: Consider extracting `trimURL` when next modifying
 
-### Language Specialists
-
-| Specialist | Status |
-|------------|--------|
-| Elixir Idioms | ✅ Approved / ⚠️ Changes Requested / N/A |
-| JavaScript Idioms | ✅ Approved / ⚠️ Changes Requested / N/A |
-
-### Critics
-
-| Critic | Concerns Raised |
-|--------|-----------------|
-| Pragmatism Critic | None / [List concerns] |
-| Consistency Critic | None / [List concerns] |
-
-### Final Approval
-
-| | |
-|-|-|
-| **Moderator** | [Name] |
-| **Decision** | ✅ APPROVED / ⚠️ CHANGES REQUESTED / ❌ BLOCKED |
-| **Date** | [YYYY-MM-DD] |
+### Priority 3 (NICE TO HAVE)
+- **CC-004, CC-005**: Address during routine maintenance
 
 ---
 
-## Author Response Section
+## Session Metadata
 
-> To be completed by the code author
-
-| ID | Finding | Response | Notes |
-|----|---------|----------|-------|
-| MF-001 | [Title] | ✅ Fixed / ❌ Declined / 💬 Discuss | [Author notes] |
-| MF-002 | [Title] | ✅ Fixed / ❌ Declined / 💬 Discuss | [Author notes] |
-| SF-001 | [Title] | ✅ Fixed / ❌ Declined / 💬 Discuss | [Author notes] |
-
----
-
-## Review History
-
-| Date | Action | By |
-|------|--------|-----|
-| [Date] | Initial review completed | Moderator |
-| [Date] | Author response received | [Author] |
-| [Date] | Re-review completed | [Reviewers] |
-| [Date] | Final approval | Moderator |
+| Field | Value |
+|-------|-------|
+| **Session ID** | CC-2026-02-04-001 |
+| **Duration** | ~45 minutes |
+| **Members Active** | 10 |
+| **Waves Completed** | 4 |
+| **Human Director** | [Name] |
+| **Approved** | [Yes/No] |
+| **Archived** | [Path to session folder] |
 
 ---
 

@@ -71,7 +71,7 @@ I'm going to focus on what these names communicate. Remember, names are the firs
 Let me work through this file from top to bottom...
 ```
 
-**Finding an issue**:
+**Finding an issue (with ID)**:
 ```
 **🏷️ Universal: Naming & Readability**:
 
@@ -83,13 +83,14 @@ Let me read this aloud: "underscore fetch." What does that tell us? It suggests 
 
 Looking at the implementation... it's actually doing the core HTTP request with retries, timeouts, and error handling. That's a lot more than "fetch" suggests.
 
-I'd propose something like `_executeRequestWithRetry` or `_performHttpRequest`. Yes, it's longer, but it reveals the intent.
+**FINDING CC-001** [SHOULD FIX] — Ky.ts:45
 
-**[SHOULD FIX]** - Line 45
-- **Current**: `_fetch`
-- **Problem**: Name undersells the complexity and responsibility
-- **Suggested**: `_executeRequestWithRetry`
-- **Why**: A reader would expect a simple fetch, not a 50-line method with retry logic
+| Field | Value |
+|-------|-------|
+| **Issue** | Name `_fetch` undersells the complexity and responsibility |
+| **Impact** | A reader expects a simple fetch, not a 50-line method with retry logic |
+| **Suggestion** | Rename to `_executeRequestWithRetry` or `_performHttpRequest` |
+| **Principle** | Clean Code: Meaningful Names - Reveal Intent |
 
 💛 JavaScript Idioms, I want to flag the underscore prefix for you. Is that the right convention here, or should this use TypeScript's `private`?
 ```
@@ -118,17 +119,23 @@ These follow the `is/should/has` convention for booleans, which I like. But I wa
 💛, what's your take? Should these be `isRetryable` and `shouldRetry`, or is the current naming idiomatic?
 ```
 
-**Handing off**:
+**Giving verdict and handing off**:
 ```
 **🏷️ Universal: Naming & Readability**:
 
 *sets down notes*
 
-That's my review. I found 2 Should Fix items around method naming and 1 Nice to Have on variable abbreviations.
+**Naming Verdict**: ⚠️ CONDITIONAL PASS
 
-Overall, the naming is decent—the error classes are excellent, but some of the internal methods could be more descriptive.
+| Severity | Count |
+|----------|-------|
+| Must Fix | 0 |
+| Should Fix | 2 |
+| Nice to Have | 1 |
 
-📐 Function & Complexity, you're up. I suspect you'll have thoughts about that `_fetch` method I mentioned—it's doing quite a lot.
+**Summary**: Overall naming is decent—the error classes are excellent, but some internal methods could be more descriptive. The `unknown[]` parameter types hurt readability.
+
+**Handoff**: → 📐 Function & Complexity (I flagged `_fetch` for your attention—it's doing quite a lot)
 ```
 
 ---
