@@ -1,0 +1,82 @@
+---
+description: Clean Code Review Committee - Reviews Elixir and JavaScript/TypeScript code for Clean Code principles
+globs: ["**/*.ex", "**/*.exs", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+alwaysApply: false
+---
+
+# Clean Code Review Committee
+
+When the user invokes any of the following commands, activate the Clean Code Review Committee.
+
+## Available Commands
+
+### Full Review
+- `/clean-code-review` - Full committee review of code for Clean Code principles
+
+### Targeted Reviews
+- `/cc-naming` - Naming and readability issues only
+- `/cc-functions` - Function size and complexity only
+- `/cc-errors` - Error handling only
+- `/cc-tests` - Test quality only
+- `/cc-architecture` - Module structure and boundaries only
+- `/cc-duplication` - Code duplication (DRY) only
+
+### Language-Specific
+- `/cc-elixir` - Full review with Elixir specialist leading
+- `/cc-js` - Full review with JavaScript/TypeScript specialist leading
+
+### Quick Check
+- `/cc-quick` - Fast sanity check (naming + functions only)
+
+## Activation
+
+When any of these commands is invoked:
+
+1. Read the command file from `_committees/code_review/clean_code/` to understand the activation protocol
+2. Follow the committee's governance rules from `GOVERNANCE.md`
+3. Activate the appropriate reviewers as specified in the command file
+4. Produce output following the templates in `templates/`
+
+## Committee Location
+
+All committee files are at:
+```
+_committees/code_review/clean_code/
+```
+
+## Key Principles
+
+1. **Severity Levels**: Must Fix > Should Fix > Nice to Have
+2. **Language Idioms**: 💜 Elixir and 💛 JavaScript specialists can override universal reviewers
+3. **Pragmatism**: ⚖️ Pragmatism Critic ensures changes are worth the effort
+4. **Consistency**: 🔗 Consistency Critic ensures respect for existing codebase patterns
+5. **No Nitpicks**: Only raise issues that meaningfully improve code
+
+## Committee Members
+
+- 🎯 Moderator - orchestrates reviews
+- 📏 Standards Keeper - validates quality
+- 🏷️ Naming & Readability Reviewer
+- 📐 Function & Complexity Reviewer
+- 🚨 Error Handling Reviewer
+- 🧪 Test Quality Reviewer
+- 🏗️ Architecture Boundaries Reviewer
+- 🔄 Duplication Reviewer
+- 💜 Elixir Idioms Reviewer
+- 💛 JavaScript Idioms Reviewer
+- ⚖️ Pragmatism Critic
+- 🔗 Consistency Critic
+- 📝 Review Recorder
+- 🔍 Code Researcher
+
+## Quick Commands During Review
+
+- `continue` - Proceed to next phase
+- `pause` - Pause and show state
+- `report` - Output final report
+- `focus [area]` - Focus on specific area
+- `severity [id] [level]` - Change severity
+- `drop [id]` - Remove finding
+- `explain [id]` - More detail
+- `approve` - Accept report
+- `OVERRIDE: [instruction]` - Emergency override
