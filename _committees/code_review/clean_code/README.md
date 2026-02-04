@@ -86,7 +86,9 @@ clean_code/
 │   ├── elixir_layer.md            # Elixir-specific
 │   ├── javascript_layer.md        # JS/TS-specific
 │   ├── severity_guide.md          # Severity definitions
-│   └── override_examples.md       # Override patterns
+│   ├── override_examples.md       # Override patterns
+│   ├── references.md              # Authoritative sources
+│   └── common_issues.md           # Recurring patterns log
 │
 ├── templates/
 │   ├── review_report.md           # Final output
@@ -97,8 +99,9 @@ clean_code/
 │   ├── cc-functions.md
 │   └── ...
 │
-└── reviews/                       # Archive
-    └── [PR-number]_[date]/
+└── reviews/                       # Auto-saved archives
+    └── [identifier]_[date]/
+        └── report.md
 ```
 
 ---

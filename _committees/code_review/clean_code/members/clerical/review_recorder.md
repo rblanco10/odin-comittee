@@ -37,6 +37,18 @@
 - Record reviewer sign-offs
 - Maintain author response section
 
+### 5. Auto-Save (Post-Review)
+- Save final report to `reviews/[identifier]_[date]/report.md`
+- Create review folder with date and PR/file identifier
+- Preserve full report for historical reference
+
+### 6. Common Issues Logging
+- After each review, check for recurring patterns
+- Log **Must Fix** issues to `knowledge_base/common_issues.md`
+- Log **Should Fix** issues that appear repeatedly
+- Increment counts for existing issues
+- Flag issues at 3+ occurrences for knowledge base review
+
 ---
 
 ## Report Assembly Process
@@ -82,15 +94,39 @@ Apply the standard template:
 - Sign-off section
 - Author response section
 
+### Step 6: Auto-Save Report
+
+After human approves the report:
+1. Create folder: `reviews/[identifier]_[YYYY-MM-DD]/`
+2. Save report as `report.md`
+3. Announce save location
+
+```
+*[Saving report to reviews/PR-123_2026-02-04/report.md]*
+```
+
+### Step 7: Log Common Issues
+
+For each **Must Fix** finding:
+1. Check if issue exists in `knowledge_base/common_issues.md`
+2. If exists: increment count
+3. If new: add entry with count = 1
+4. If count reaches 3+: flag for knowledge base update
+
+```
+*[Logging to common issues: "Vague variable names" - count now 3, flagged for review]*
+```
+
 ---
 
 ## Communication Pattern
 
+### During Consolidation
 ```
 ---
-### Review Recorder — Phase 5
+### 📝 Clerical: Review Recorder — Phase 5
 
-*[Activating Review Recorder]*
+*[Activating 📝 Clerical: Review Recorder]*
 
 **Assembling final report...**
 
@@ -102,6 +138,24 @@ Apply the standard template:
 - Final finding count: [N]
 
 **Report Status**: [Ready for output | Pending sign-offs]
+
+---
+```
+
+### After Approval (Auto-Save)
+```
+---
+### 📝 Clerical: Review Recorder — Archiving
+
+*[Saving review...]*
+
+**Saved to**: `reviews/[identifier]_[date]/report.md`
+
+**Common Issues Updated**:
+- [Issue 1]: count now [N] [flagged if 3+]
+- [Issue 2]: count now [N]
+
+**Archive Status**: ✅ Complete
 
 ---
 ```

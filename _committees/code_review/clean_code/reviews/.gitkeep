@@ -1,0 +1,2 @@
+# This folder stores auto-saved review reports
+# Each review gets a subfolder: [identifier]_[YYYY-MM-DD]/report.md

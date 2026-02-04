@@ -245,9 +245,53 @@ Every report MUST include:
 
 ---
 
-## Article VIII: Quick Commands
+## Article VIII: Archiving & Learning
 
-### Section 8.1: Available Commands
+### Section 8.1: Auto-Save Protocol
+
+After human approves a report (`approve` command):
+
+1. **📝 Clerical: Review Recorder** creates archive folder
+2. Folder naming: `reviews/[identifier]_[YYYY-MM-DD]/`
+   - `[identifier]` = PR number, file name, or descriptive slug
+3. Save complete report as `report.md`
+4. Announce save location to human
+
+### Section 8.2: Common Issues Logging
+
+After each review:
+
+1. **📝 Clerical: Review Recorder** examines all **Must Fix** findings
+2. For each finding, check `knowledge_base/common_issues.md`
+3. If issue exists: increment count
+4. If new issue: add with count = 1
+5. If count reaches **3+**: flag for knowledge base review
+6. If count reaches **5+**: recommend adding to layer files
+7. If count reaches **10+**: recommend adding to severity_guide.md
+
+### Section 8.3: Knowledge Base Updates
+
+When common issues reach threshold:
+
+1. 🎯 **Leadership: Moderator** proposes update
+2. Human Director approves
+3. Update relevant knowledge base file
+4. Mark issue as "Graduated" in common_issues.md
+
+### Section 8.4: Reference Authority
+
+All findings MUST be traceable to authoritative sources in `knowledge_base/references.md`:
+- Clean Code book
+- Community style guides (Elixir, Airbnb JS, Google TS)
+- Official documentation
+
+Findings not backed by references may be challenged by ⚖️ **Critic: Pragmatism**.
+
+---
+
+## Article IX: Quick Commands
+
+### Section 9.1: Available Commands
 
 | Command | Effect |
 |---------|--------|
@@ -263,7 +307,7 @@ Every report MUST include:
 | `route [reviewer]` | Add reviewer to active set |
 | `skip [reviewer]` | Skip a pending reviewer |
 
-### Section 8.2: Emergency Override
+### Section 9.2: Emergency Override
 
 Human can interrupt at any time with:
 
@@ -275,7 +319,7 @@ This immediately pauses, applies instruction, and resumes.
 
 ---
 
-## Article IX: Amendments
+## Article X: Amendments
 
 This governance document may be amended by:
 1. Proposal from Human Director
