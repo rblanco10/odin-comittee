@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  /* Cozy Pastel Color Palette */
+  --color-pastel-bg: #F0E6F5;
+  --color-pastel-bg-alt: #E8DFF0;
+  --color-pastel-card: #FFF5F7;
+  --color-pastel-card-alt: #FFF0F5;
+  --color-pastel-pink: #FFB5C5;
+  --color-pastel-pink-dark: #F8A5B8;
+  --color-pastel-mint: #B8E8D0;
+  --color-pastel-mint-dark: #98D8B8;
+  --color-pastel-lavender: #D4C8E8;
+  --color-pastel-peach: #FFD0C0;
+  --color-pastel-yellow: #FFF0B8;
+  --color-pastel-blue: #B8D8F0;
+  --color-text-primary: #5C4B6B;
+  --color-text-secondary: #8B7A9B;
+  --color-text-muted: #A898B8;
+  
+  /* Keep spotify green for accents */
+  --color-spotify-green: #1DB954;
+  
+  /* Font families */
+  --font-pixel: 'Press Start 2P', cursive;
+  --font-body: 'Nunito', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #F0E6F5 0%, #E8DFF0 50%, #F5E6F0 100%);
+  color: #5C4B6B;
+}
+
+#root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Pixel font utility class */
+.font-pixel {
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* Custom scrollbar - pastel themed */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F0E6F5;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #FFB5C5 0%, #D4C8E8 100%);
+  border-radius: 5px;
+  border: 2px solid #F0E6F5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #F8A5B8 0%, #C4B8D8 100%);
+}
+
+/* Soft shadow utilities */
+.shadow-pastel {
+  box-shadow: 0 4px 20px rgba(212, 200, 232, 0.4), 0 2px 8px rgba(255, 181, 197, 0.2);
+}
+
+.shadow-pastel-lg {
+  box-shadow: 0 8px 30px rgba(212, 200, 232, 0.5), 0 4px 12px rgba(255, 181, 197, 0.3);
+}
+
+/* Regular pointer cursor for interactive elements */
+button,
+a,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Disabled buttons should show not-allowed cursor */
+button:disabled,
+[disabled] {
+  cursor: not-allowed;
+}
